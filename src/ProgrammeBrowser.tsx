@@ -1,10 +1,15 @@
 import { useState } from 'react'
 import programs from './programs'
 import { getStoredSelections, saveSelections } from './selections'
-import type { SelectionPriority } from './selections'
+import type { SelectionPriority, Selections } from './selections'
 
 type ProgrammeBrowserProps = {
   displayName: string
+}
+
+type SelectionSummary = {
+  want: number
+  ifAvailable: number
 }
 
 function groupProgramsByDay() {
@@ -17,10 +22,45 @@ function groupProgramsByDay() {
   }, new Map())
 }
 
+function getSelectionSummary(selections: Selections, eventIds: string[]): SelectionSummary {
+  return eventIds.reduce(
+    (summary, eventId) => {
+      if (selections[eventId] === 'WANT') {
+        summary.want += 1
+      }
+
+      if (selections[eventId] === 'IF_AVAILABLE') {
+        summary.ifAvailable += 1
+      }
+
+      return summary
+    },
+    { want: 0, ifAvailable: 0 },
+  )
+}
+
+function SelectionSummary({ summary, className = '' }: { summary: SelectionSummary; className?: string }) {
+  return (
+    <p
+      className={`selection-summary ${className}`}
+      aria-label={`${summary.want} Szeretném, ${summary.ifAvailable} Ha marad`}
+    >
+      <span aria-hidden="true">❤️</span>
+      <span>{summary.want}</span>
+      <span aria-hidden="true">💛</span>
+      <span>{summary.ifAvailable}</span>
+    </p>
+  )
+}
+
 function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
   const programsByDay = groupProgramsByDay()
   const [selections, setSelections] = useState(getStoredSelections)
   const [statusMessage, setStatusMessage] = useState('')
+  const overallSummary = getSelectionSummary(
+    selections,
+    programs.map((program) => program.id),
+  )
 
   function updateSelection(eventId: string, priority: SelectionPriority, title: string) {
     const currentPriority = selections[eventId]
@@ -52,6 +92,7 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
         <p className="festival-name">Ördögkatlan</p>
         <h1 id="app-title">Sorszámvadász</h1>
         <p className="eyebrow">Szia, {displayName}!</p>
+        <SelectionSummary summary={overallSummary} className="selection-summary-overall" />
       </header>
 
       <section aria-labelledby="programme-title">
@@ -62,7 +103,15 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
 
         {[...programsByDay].map(([day, dayPrograms]) => (
           <section className="programme-day" key={day} aria-labelledby={`day-${day}`}>
-            <h3 id={`day-${day}`}>{day}</h3>
+            <div className="programme-day-heading">
+              <h3 id={`day-${day}`}>{day}</h3>
+              <SelectionSummary
+                summary={getSelectionSummary(
+                  selections,
+                  dayPrograms.map((program) => program.id),
+                )}
+              />
+            </div>
             <div className="programme-list">
               {dayPrograms.map((program) => (
                 <article className="programme-card" key={program.id}>

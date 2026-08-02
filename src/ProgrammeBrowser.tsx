@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { getDailyChance } from './chances'
 import programs from './programs'
 import { clearSelections, getStoredSelections, saveSelections } from './selections'
 import type { SelectionPriority, Selections } from './selections'
@@ -49,6 +50,18 @@ function SelectionSummary({ summary, className = '' }: { summary: SelectionSumma
       <span>{summary.want}</span>
       <span aria-hidden="true">💛</span>
       <span>{summary.ifAvailable}</span>
+    </p>
+  )
+}
+
+function DailyChance({ day }: { day: string }) {
+  const chance = getDailyChance(day)
+
+  return (
+    <p className="daily-chance">
+      <span>Esély</span>
+      <span>{chance.icon}</span>
+      <span>{chance.label}</span>
     </p>
   )
 }
@@ -144,8 +157,9 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
 
         {[...programsByDay].map(([day, dayPrograms]) => (
           <section className="programme-day" key={day} aria-labelledby={`day-${day}`}>
-            <div className="programme-day-heading">
+            <div className="programme-day-header">
               <h3 id={`day-${day}`}>{day}</h3>
+              <DailyChance day={day} />
               <SelectionSummary
                 summary={getSelectionSummary(
                   selections,

@@ -1,0 +1,672 @@
+[
+  {
+    "id": "7a4e2012-f5c7-5a39-b8bb-d8d8b1a87505",
+    "day": "KEDD",
+    "dayId": "KEDD-01",
+    "startTime": "16:00",
+    "title": "Balhéatlasz",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "da77a7ef-9d3f-528f-85ba-dd9b86fad6d7",
+    "day": "KEDD",
+    "dayId": "KEDD-02",
+    "startTime": "20:00",
+    "title": "Balhéatlasz",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "580e8e07-9646-5cc2-9a6b-0b91d2f7252e",
+    "day": "KEDD",
+    "dayId": "KEDD-03",
+    "startTime": "20:00",
+    "title": "Béke",
+    "type": "színház",
+    "location": "SZOBORPARK",
+    "active": true
+  },
+  {
+    "id": "6f0bac3a-b5bc-5e05-b658-154dea5c6b93",
+    "day": "SZERDA",
+    "dayId": "SZERDA-01",
+    "startTime": "13:00",
+    "title": "Antigoné",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "99324a22-dffd-52d4-8817-589756d00b0d",
+    "day": "SZERDA",
+    "dayId": "SZERDA-02",
+    "startTime": "14:30",
+    "title": "Oktatás",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "05658903-a482-53f4-9eef-b78db1006ae5",
+    "day": "SZERDA",
+    "dayId": "SZERDA-03",
+    "startTime": "15:00",
+    "title": "A patriarchátus gyásza",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "f776a19a-c3bf-5603-a4b9-806b295373b0",
+    "day": "SZERDA",
+    "dayId": "SZERDA-04",
+    "startTime": "15:00",
+    "title": "Falaink",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "b88ed143-cb4d-5e84-aa0f-2b31e110db36",
+    "day": "SZERDA",
+    "dayId": "SZERDA-05",
+    "startTime": "16:00",
+    "title": "Revizor",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "78e7d395-19a6-57b5-b866-7644b46bd0a0",
+    "day": "SZERDA",
+    "dayId": "SZERDA-06",
+    "startTime": "16:00",
+    "title": "Z naplója, avagy az Agytakarítás",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "5272d4d0-dbe7-541c-b9a4-21ad0f82fc12",
+    "day": "SZERDA",
+    "dayId": "SZERDA-07",
+    "startTime": "16:30",
+    "title": "Egri csillagok avagy számháborúzzunk együtt!",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "da476503-fff7-5bf6-a3cc-eb7732194c78",
+    "day": "SZERDA",
+    "dayId": "SZERDA-08",
+    "startTime": "17:00",
+    "title": "Budapesti Színészképző: Traschool System",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "6055f96f-eb36-599a-83ba-7aee726570f7",
+    "day": "SZERDA",
+    "dayId": "SZERDA-09",
+    "startTime": "17:00",
+    "title": "Második tavasz",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "ddad1cf7-c776-574b-862c-3c4879826577",
+    "day": "SZERDA",
+    "dayId": "SZERDA-10",
+    "startTime": "18:00",
+    "title": "Faluturisták",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "09996d0a-cc09-5fa2-a96f-72adc341d41b",
+    "day": "SZERDA",
+    "dayId": "SZERDA-11",
+    "startTime": "18:00",
+    "title": "Oktatás",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "c45fc806-f1b9-595d-b31c-de10411f3eb0",
+    "day": "SZERDA",
+    "dayId": "SZERDA-12",
+    "startTime": "18:30",
+    "title": "Krusovszky Dénes: Akik már nem leszünk sosem",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "86ef5fea-0361-5dcc-9fcf-5fee3b6a317e",
+    "day": "SZERDA",
+    "dayId": "SZERDA-13",
+    "startTime": "18:30",
+    "title": "Portugál",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "3d8a78b7-5263-5cb5-ae96-6dbb3452eab9",
+    "day": "SZERDA",
+    "dayId": "SZERDA-14",
+    "startTime": "18:30",
+    "title": "Víg Mihály koncert",
+    "type": "koncert",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "2f4cb1ff-32b5-5608-bccc-7c6068a99aee",
+    "day": "SZERDA",
+    "dayId": "SZERDA-15",
+    "startTime": "20:00",
+    "title": "Revizor",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "172d053c-e7c2-5676-9018-052e645553f0",
+    "day": "SZERDA",
+    "dayId": "SZERDA-16",
+    "startTime": "21:00",
+    "title": "Leláncolt Prométheusz",
+    "type": "színház",
+    "location": "SZOBORPARK",
+    "active": true
+  },
+  {
+    "id": "59ff8fc8-5ac0-528c-844c-e4905dd32dc3",
+    "day": "SZERDA",
+    "dayId": "SZERDA-17",
+    "startTime": "21:00",
+    "title": "A vihar kapujában",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "2e7853a8-fcc0-5fcb-b179-cff69ae5a517",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-01",
+    "startTime": "13:00",
+    "title": "Súlytalanság, avagy Az életben mindig szükség van hőstettekre",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "f2587969-3339-5e60-b8dd-b3ebe601ae93",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-02",
+    "startTime": "14:00",
+    "title": "Magánszenvedély",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "e3cc5a03-1994-5eb5-b955-ebbfaa822804",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-03",
+    "startTime": "14:30",
+    "title": "Reggel és este",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "789b20f2-33b9-5b46-af67-0d0ac2a15d52",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-04",
+    "startTime": "15:00",
+    "title": "Vv, mint Veszedelmes viszonyok",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "e4fd8ec2-9fbc-5842-b774-e76cc00b7076",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-05",
+    "startTime": "16:00",
+    "title": "Kaukázusi",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "85be0cca-4b40-5fab-8084-f82350808de2",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-06",
+    "startTime": "16:00",
+    "title": "Manga - Balett - Play",
+    "type": "tánc",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "16c1753a-ad53-5b5b-80ef-1538ff91fb02",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-07",
+    "startTime": "16:30",
+    "title": "Egri csillagok avagy számháborúzzunk együtt!",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "cfc9c8e3-1204-51d3-b0f6-9d55ebc0e406",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-08",
+    "startTime": "16:30",
+    "title": "Coreline és a titkos ajtó",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "e7038a4b-c782-5947-8cf6-3809fcbbabac",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-09",
+    "startTime": "17:00",
+    "title": "Súlytalanság, avagy Az életben mindig szükség van hőstettekre",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "11020bb4-a7dd-5af3-a135-e8b9b4517fc4",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-10",
+    "startTime": "18:00",
+    "title": "Faluturisták",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "d5c4d4c2-3e4d-5966-b3dc-9970f5b16cd2",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-11",
+    "startTime": "18:00",
+    "title": "Reggel és este",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "705181f2-8efd-54fb-b6a1-8247e2e14b68",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-12",
+    "startTime": "18:30",
+    "title": "A szárny nélküli angyalokról",
+    "type": "színház-tánc",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "ff9e0705-2fcf-5c16-bc73-3aace9dde639",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-13",
+    "startTime": "18:30",
+    "title": "Tizenhét hattyúk",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "d4806fee-7e71-5553-ab05-690b8ae9a84e",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-14",
+    "startTime": "20:00",
+    "title": "Kaukázusi",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "1b43e665-e6d8-5e0b-acf9-ff1505dc96f3",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-15",
+    "startTime": "21:00",
+    "title": "szeretet vessző béke",
+    "type": "koncert",
+    "location": "SZOBORPARK",
+    "active": true
+  },
+  {
+    "id": "b182ccc3-d326-5a3c-bfc7-c4a72ba1f70a",
+    "day": "CSÜTÖRTÖK",
+    "dayId": "CSÜTÖRTÖK-16",
+    "startTime": "21:00",
+    "title": "Zug",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "10591f97-c083-52c7-9c93-05e0d34fbe41",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-01",
+    "startTime": "11:00",
+    "title": "Faluturisták",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "3c4af829-f811-5761-88a5-27bb3a0b34ec",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-02",
+    "startTime": "14:00",
+    "title": "Egy Életem – Grecsó Krisztián",
+    "type": "színház",
+    "location": "MOKOS",
+    "active": true
+  },
+  {
+    "id": "0da4ea8e-8fd4-5220-874f-15d40e97f5da",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-03",
+    "startTime": "14:30",
+    "title": "Rühes kutya",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "cd795f46-18f1-5daa-b834-a89c8dd77ac3",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-04",
+    "startTime": "15:00",
+    "title": "Kaukázusi",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "1a918286-7411-5426-9c7c-241fca005715",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-05",
+    "startTime": "15:00",
+    "title": "Rap, Gender, Komédia",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "1fde83d1-a57c-55b3-9b09-1c6c8a9226b8",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-06",
+    "startTime": "16:00",
+    "title": "A bogyósgyümölcskertész fia",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "a64ab6da-a007-5837-8346-2eb0cd8bac9c",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-07",
+    "startTime": "16:00",
+    "title": "Kartoték",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "6dd46da2-0a4b-517b-935c-05e160fbca82",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-08",
+    "startTime": "16:30",
+    "title": "Egri csillagok avagy számháborúzzunk együtt!",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "9537c1ad-af0c-545c-bf87-18820fea0cee",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-09",
+    "startTime": "17:00",
+    "title": "Puskin: Anyegin",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "436e60ea-d75b-5ea8-8dcf-426bd24641f6",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-10",
+    "startTime": "17:30",
+    "title": "Műhelylátogatás",
+    "type": "színház",
+    "location": "MOKOS",
+    "active": true
+  },
+  {
+    "id": "678b4cdc-9e21-5504-b5f1-6f75926d3b10",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-11",
+    "startTime": "18:00",
+    "title": "Faluturisták",
+    "type": "színház",
+    "location": "MOKOS",
+    "active": true
+  },
+  {
+    "id": "a8c87ad8-fe5d-5862-8b8e-879e81927854",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-12",
+    "startTime": "18:00",
+    "title": "Rühes kutya",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "78ceffc8-2198-51a4-bdf4-ae1621451d91",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-13",
+    "startTime": "18:30",
+    "title": "Miért hagytuk, hogy így legyen?",
+    "type": "koncert-színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "9d998a21-7718-5446-bd63-7783814931c6",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-14",
+    "startTime": "18:30",
+    "title": "A szolidaritás női arca",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "fb6ce858-3330-531a-88f4-f3053dbdd066",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-15",
+    "startTime": "18:30",
+    "title": "Kezdhetek folytatódni",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "9593aaf6-3cb5-588a-be3c-3098b84d8e27",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-16",
+    "startTime": "20:00",
+    "title": "Kartoték",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "a1c31660-76bc-56cb-be31-e6626d576f96",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-17",
+    "startTime": "21:00",
+    "title": "Lüktető idők",
+    "type": "koncert",
+    "location": "SZOBORPARK",
+    "active": true
+  },
+  {
+    "id": "0aba1817-0c1a-5ad5-bb22-cedea350aa96",
+    "day": "PÉNTEK",
+    "dayId": "PÉNTEK-18",
+    "startTime": "21:00",
+    "title": "A leprikónok átka",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "1db94e49-6e67-5935-9529-bb8d666fea77",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-01",
+    "startTime": "13:00",
+    "title": "Az óceánjáró zongorista legendája",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "95499ae2-8b32-5edb-820a-dcddfbe7253f",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-02",
+    "startTime": "13:30",
+    "title": "CHANGES",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "b0c48838-9249-5036-9a47-6f8701d995e5",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-03",
+    "startTime": "14:00",
+    "title": "Műhelylátogatás",
+    "type": "színház",
+    "location": "MOKOS",
+    "active": true
+  },
+  {
+    "id": "6a888989-5f83-51c8-bb76-95be20969af0",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-04",
+    "startTime": "14:30",
+    "title": "Trip to Jerusalem",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "f113131a-8d54-5522-b648-2d1fde985a7d",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-05",
+    "startTime": "15:00",
+    "title": "Ketrecharc",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "e253bb19-1152-50ba-968b-2778f6c74b34",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-06",
+    "startTime": "16:00",
+    "title": "Az öldöklés istene",
+    "type": "színház",
+    "location": "KISHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "07bb443f-433d-5a34-8500-f95827009345",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-07",
+    "startTime": "16:00",
+    "title": "Cigyar Magány",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "a4bb0ef3-4871-5d0c-a9cd-dc949812f01c",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-08",
+    "startTime": "17:00",
+    "title": "CHANGES",
+    "type": "színház",
+    "location": "NAGYHARSÁNY",
+    "active": true
+  },
+  {
+    "id": "cd3e44ab-2457-5294-9ad7-7e9693a71766",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-09",
+    "startTime": "18:00",
+    "title": "Egy Életem",
+    "type": "színház",
+    "location": "MOKOS",
+    "active": true
+  },
+  {
+    "id": "d36232cf-5456-5d43-9ac5-b58dc67401fb",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-10",
+    "startTime": "18:00",
+    "title": "Trip to Jerusalem",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "3796ddea-976c-5940-b6bd-24e369f30e4a",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-11",
+    "startTime": "18:30",
+    "title": "Éghajlati viszonyok",
+    "type": "irodalom-színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "2e6257e9-0494-547a-b2e6-ded03e754052",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-12",
+    "startTime": "18:30",
+    "title": "Varsányi Anna: Anya",
+    "type": "színház",
+    "location": "BEREMEND",
+    "active": true
+  },
+  {
+    "id": "9bd7a086-be85-56f5-892b-cab2aceeca1d",
+    "day": "SZOMBAT",
+    "dayId": "SZOMBAT-13",
+    "startTime": "21:00",
+    "title": "Holdbéli csónakos",
+    "type": "színház",
+    "location": "SZOBORPARK",
+    "active": true
+  }
+]

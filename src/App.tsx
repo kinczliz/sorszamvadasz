@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import ProgrammeBrowser from './ProgrammeBrowser'
 
 const displayNameStorageKey = 'sorszamvadasz.displayName'
 
@@ -37,14 +38,7 @@ function App() {
   }
 
   if (displayName) {
-    return (
-      <main className="participant" aria-labelledby="app-title">
-        <p className="festival-name">Ördögkatlan</p>
-        <h1 id="app-title">Sorszámvadász</h1>
-        <p className="eyebrow">Szia, {displayName}!</p>
-        <p className="description">A nevedet elmentettük ezen az eszközön.</p>
-      </main>
-    )
+    return <ProgrammeBrowser displayName={displayName} />
   }
 
   return (

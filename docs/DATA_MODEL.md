@@ -2,7 +2,7 @@
 
 **Project:** Sorszámvadász
 
-**Version:** 1.0
+**Version:** 1.1
 
 **Status:** Accepted
 
@@ -12,29 +12,29 @@
 
 This document defines the business data model of Sorszámvadász.
 
-It is independent of any storage technology.
+The document is independent of the storage technology.
 
-Google Sheets, JSON files or SQL databases are implementation details.
+Google Sheets, JSON files or SQL databases are implementation details and must not influence the business model.
 
 ---
 
 # Core Concepts
 
-The application is built around seven core entities:
+The application is built around seven core entities.
 
+- EventSet
 - Event
 - User
 - Selection
 - Volunteer
 - Allocation
-- EventSet
 - ApplicationState
 
 ---
 
 # EventSet
 
-Represents one imported programme list.
+An EventSet represents one imported programme list.
 
 Examples:
 
@@ -44,17 +44,15 @@ Examples:
 
 Only one EventSet can be active at any given time.
 
----
+## Attributes
 
-Attributes
-
-| Name | Type |
-|------|------|
-| id | UUID |
-| name | String |
-| mode | DEMO \| LIVE |
-| createdAt | DateTime |
-| active | Boolean |
+| Name | Type | Description |
+|------|------|-------------|
+| id | UUID | Internal identifier |
+| name | String | Display name |
+| mode | DEMO \| LIVE | Dataset type |
+| createdAt | DateTime | Creation timestamp |
+| active | Boolean | Indicates the currently active EventSet |
 
 ---
 
@@ -62,27 +60,25 @@ Attributes
 
 Represents one programme that may require a sorszám.
 
----
+## Attributes
 
-Attributes
+| Name | Type | Description |
+|------|------|-------------|
+| id | UUID | Internal identifier |
+| eventSetId | UUID | Parent EventSet |
+| day | Date | Festival day |
+| dayId | String | Original import identifier (e.g. SZERDA-01) |
+| startTime | Time | Start time |
+| title | String | Programme title |
+| type | String | Programme category |
+| location | String | Venue |
+| active | Boolean | Visibility flag |
 
-| Name | Type |
-|------|------|
-| id | UUID |
-| eventSetId | UUID |
-| day | Date |
-| dayId | String |
-| startTime | Time |
-| title | String |
-| type | String |
-| location | String |
-| active | Boolean |
-
----
-
-Rules
+## Rules
 
 An Event belongs to exactly one EventSet.
+
+Events are never modified by participants.
 
 ---
 
@@ -92,26 +88,26 @@ Represents one participant.
 
 Authentication is intentionally lightweight.
 
-The user's name is sufficient.
+The application is based on recognition rather than identity verification.
 
----
+## Attributes
 
-Attributes
+| Name | Type | Description |
+|------|------|-------------|
+| id | UUID | Internal identifier |
+| displayName | String | Name visible to other participants |
+| createdAt | DateTime | Registration time |
+| lastSeen | DateTime | Last activity |
 
-| Name | Type |
-|------|------|
-| id | UUID |
-| name | String |
-| createdAt | DateTime |
-| lastSeen | DateTime |
+## Rules
 
----
+Display names **must be unique within an EventSet**.
 
-Rules
+The application assists participants in choosing a unique display name.
 
-Names are not required to be unique.
+The purpose of the display name is community recognition, not authentication.
 
-The UUID is the internal identifier.
+Internally every User is identified exclusively by a UUID.
 
 ---
 
@@ -119,33 +115,37 @@ The UUID is the internal identifier.
 
 Represents one participant's preference for one Event.
 
----
+## Attributes
 
-Attributes
+| Name | Type | Description |
+|------|------|-------------|
+| id | UUID | Internal identifier |
+| userId | UUID | Participant |
+| eventId | UUID | Selected Event |
+| priority | Priority | Preference level |
+| updatedAt | DateTime | Last modification |
 
-| Name | Type |
-|------|------|
-| id | UUID |
-| userId | UUID |
-| eventId | UUID |
-| priority | Priority |
-| updatedAt | DateTime |
-
----
-
-Priority
+## Priority
 
 Possible values:
 
 - WANT
 - IF_AVAILABLE
 
-UI translations:
+User Interface
 
-- WANT → Szeretném
-- IF_AVAILABLE → Ha marad
+| Value | Display |
+|------|----------|
+| WANT | Szeretném |
+| IF_AVAILABLE | Ha marad |
+
+## Rules
 
 Only one Selection may exist for a given User and Event.
+
+Changing the priority updates the existing Selection.
+
+Removing a preference deletes the Selection.
 
 ---
 
@@ -153,41 +153,35 @@ Only one Selection may exist for a given User and Event.
 
 Represents a participant acting as a Sorszámvadász.
 
----
+## Attributes
 
-Attributes
-
-| Name | Type |
-|------|------|
-| id | UUID |
-| userId | UUID |
-| active | Boolean |
-| startedAt | DateTime |
-| finishedAt | DateTime |
+| Name | Type | Description |
+|------|------|-------------|
+| id | UUID | Internal identifier |
+| userId | UUID | Related participant |
+| active | Boolean | Volunteer currently active |
+| startedAt | DateTime | Start time |
+| finishedAt | DateTime | Finish time |
 
 ---
 
 # Allocation
 
-Represents the volunteer's intention to request sorszámok.
+Represents a volunteer's intention to request sorszámok.
 
----
+## Attributes
 
-Attributes
+| Name | Type | Description |
+|------|------|-------------|
+| id | UUID | Internal identifier |
+| volunteerId | UUID | Volunteer |
+| eventId | UUID | Requested programme |
+| quantity | Integer | Number of requested sorszámok |
+| createdAt | DateTime | Timestamp |
 
-| Name | Type |
-|------|------|
-| id | UUID |
-| volunteerId | UUID |
-| eventId | UUID |
-| quantity | Integer |
-| createdAt | DateTime |
+## Rules
 
----
-
-Rules
-
-quantity must be between 1 and 4.
+Quantity must be between 1 and 4.
 
 A volunteer may allocate sorszámok for at most two Events.
 
@@ -199,100 +193,88 @@ These limits are configurable.
 
 Represents the current state of one festival day.
 
-Possible values:
+Possible values
 
 - OPEN
 - CLOSED
 - QUEUEING
 - FINISHED
 
-Meaning
+## Meaning
 
-OPEN
+### OPEN
 
-Participants may edit selections.
+Participants may create and modify Selections.
 
----
+Volunteers are inactive.
 
-CLOSED
+### CLOSED
 
-Selections are locked.
+Participants cannot modify Selections.
 
-Volunteers inactive.
+Volunteers are not yet allocating sorszámok.
 
----
+### QUEUEING
 
-QUEUEING
+Participants remain locked.
 
-Participants locked.
+Volunteers may create and modify Allocations.
 
-Volunteers may create Allocations.
+### FINISHED
 
----
+The festival morning has ended.
 
-FINISHED
-
-Read-only.
-
-Statistics only.
+The application becomes read-only.
 
 ---
 
 # Configuration
 
-Business rules must not be hardcoded.
+Business rules must never be hardcoded.
 
-At minimum, the following settings exist:
+At minimum the following configuration values exist.
 
 | Setting | Default |
 |----------|---------|
 | maxPerformancesPerVolunteer | 2 |
 | maxSorszamPerPerformance | 4 |
-| activeEventSet | current Live |
-| demoEventSet | current Demo |
+| activeEventSet | Current LIVE dataset |
+| demoEventSet | Current DEMO dataset |
 
 ---
 
 # Business Rules
 
-A participant may have at most one Selection per Event.
+A participant may have only one Selection for a given Event.
 
-Changing "Szeretném" to "Ha marad" updates the existing Selection.
+Selections belong to exactly one Event.
 
-Deleting a preference removes the Selection.
+Events belong to exactly one EventSet.
 
----
+Users belong to exactly one EventSet.
 
-A volunteer may allocate:
-
-- maximum two Events
-- maximum four sorszám per Event
-
-These limits are configurable.
-
----
+Display names are unique within an EventSet.
 
 Resetting a festival day deletes Selections and Allocations for that day only.
 
-Events are never deleted.
+Events are never deleted by administrative operations.
 
----
+Switching between Demo and Live changes only the active EventSet.
 
-Switching between Demo and Live changes the active EventSet.
-
-Selections remain isolated.
+Selections, Volunteers and Allocations are completely isolated between EventSets.
 
 ---
 
 # Future Extensions
 
-The model intentionally allows future additions such as:
+The model intentionally allows future additions without structural changes.
 
-- ticket capacities
-- waitlists
-- user roles
-- multiple festivals
-- statistics
+Examples include:
+
+- programme capacities
+- waiting lists
 - recommendation engine
-
-without changing the existing entities.
+- multiple festivals
+- participant statistics
+- volunteer statistics
+- optional authentication

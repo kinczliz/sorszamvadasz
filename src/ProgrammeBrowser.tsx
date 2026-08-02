@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import programs from './programs'
-import { getStoredSelections, saveSelections } from './selections'
+import { clearSelections, getStoredSelections, saveSelections } from './selections'
 import type { SelectionPriority, Selections } from './selections'
 
 type ProgrammeBrowserProps = {
@@ -57,10 +57,29 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
   const programsByDay = groupProgramsByDay()
   const [selections, setSelections] = useState(getStoredSelections)
   const [statusMessage, setStatusMessage] = useState('')
+  const [isResetDialogOpen, setIsResetDialogOpen] = useState(false)
+  const resetDialogRef = useRef<HTMLDialogElement>(null)
   const overallSummary = getSelectionSummary(
     selections,
     programs.map((program) => program.id),
   )
+  const hasSelections = overallSummary.want + overallSummary.ifAvailable > 0
+
+  useEffect(() => {
+    const dialog = resetDialogRef.current
+
+    if (!dialog) {
+      return
+    }
+
+    if (isResetDialogOpen && !dialog.open) {
+      dialog.showModal()
+    }
+
+    if (!isResetDialogOpen && dialog.open) {
+      dialog.close()
+    }
+  }, [isResetDialogOpen])
 
   function updateSelection(eventId: string, priority: SelectionPriority, title: string) {
     const currentPriority = selections[eventId]
@@ -86,12 +105,34 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
     )
   }
 
+  function resetSelections() {
+    if (!clearSelections()) {
+      setStatusMessage('A kiválasztásokat most nem tudtuk törölni ezen az eszközön.')
+      return
+    }
+
+    setSelections({})
+    setStatusMessage('Minden kiválasztás törölve.')
+    setIsResetDialogOpen(false)
+  }
+
   return (
     <main className="programme-browser" aria-labelledby="app-title">
       <header className="programme-header">
         <p className="festival-name">Ördögkatlan</p>
         <h1 id="app-title">Sorszámvadász</h1>
-        <p className="eyebrow">Szia, {displayName}!</p>
+        <div className="greeting">
+          <p className="eyebrow">Szia, {displayName}!</p>
+          {hasSelections && (
+            <button
+              type="button"
+              className="restart-button"
+              onClick={() => setIsResetDialogOpen(true)}
+            >
+              Újrakezdem
+            </button>
+          )}
+        </div>
         <SelectionSummary summary={overallSummary} className="selection-summary-overall" />
       </header>
 
@@ -145,6 +186,22 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
           </section>
         ))}
       </section>
+
+      <dialog
+        ref={resetDialogRef}
+        className="reset-dialog"
+        aria-labelledby="reset-dialog-title"
+        onClose={() => setIsResetDialogOpen(false)}
+      >
+        <h2 id="reset-dialog-title">Újrakezded?</h2>
+        <p>Minden kiválasztásod törlődni fog.</p>
+        <div className="dialog-actions">
+          <button type="button" className="dialog-cancel" onClick={() => setIsResetDialogOpen(false)}>
+            Mégse
+          </button>
+          <button type="button" onClick={resetSelections}>Újrakezdem</button>
+        </div>
+      </dialog>
     </main>
   )
 }

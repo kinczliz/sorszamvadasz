@@ -38,3 +38,12 @@ export function saveSelections(selections: Selections): boolean {
     return false
   }
 }
+
+export function clearSelections(): boolean {
+  try {
+    window.localStorage.removeItem(selectionsStorageKey)
+    return true
+  } catch {
+    return false
+  }
+}

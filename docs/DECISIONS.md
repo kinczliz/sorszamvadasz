@@ -64,3 +64,13 @@ Reason
 The participant frontend already owns the complete current state.
 
 Replacing state is simpler, naturally idempotent and easier to recover after temporary failures.
+
+---
+
+Decision #004
+
+Volunteer acquisition and allocation do not trigger metric recalculation.
+Volunteers are expected to coordinate directly while queueing.
+The application provides hourly planning information, not real-time inventory tracking.
+
+---

@@ -11,7 +11,7 @@ var Config = {
   MAX_DISPLAY_NAME_LENGTH: 40,
   MAX_WANT_PER_DAY: 2,
   MAX_IF_AVAILABLE_PER_DAY: 4,
-  PROGRAMME_DATA_URL: 'https://raw.githubusercontent.com/zokinczl/sorszamvadasz/main/data/2026/programs.json',
+  PROGRAMME_DATA_URL: 'https://raw.githubusercontent.com/kinczliz/sorszamvadasz/main/data/2026/programs.json',
   PROGRAMME_CACHE_TTL_SECONDS: 300,
   REGISTRATION_LOCK_TIMEOUT_MS: 5000,
   USERS_HEADERS: ['id', 'environment', 'displayName', 'displayNameKey', 'createdAt', 'lastSeen'],

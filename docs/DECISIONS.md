@@ -39,3 +39,13 @@ Demo and Live datasets must remain isolated.
 Target:
 
 Before implementing the Google Sheets backend.
+
+---
+
+## Decision #002
+
+❤️ selections are intentionally limited because they represent a participant's highest priorities.
+This improves the quality of demand estimation and encourages thoughtful choices.
+
+💛 selections provide additional flexibility without influencing demand metrics.
+

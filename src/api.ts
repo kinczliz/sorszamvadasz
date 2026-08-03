@@ -133,8 +133,8 @@ async function request<T>(action: string, payload: Record<string, unknown>): Pro
   throw new ApiError('MALFORMED_RESPONSE', 'A közös rendszer hibás választ adott.')
 }
 
-export function register(displayName: string, selections: Selections, environment: Environment = currentEnvironment) {
-  return request<RegisterResponse>('register', { environment, displayName, selections })
+export function register(displayName: string, selections: Selections, registrationId: string, environment: Environment = currentEnvironment) {
+  return request<RegisterResponse>('register', { environment, displayName, selections, registrationId })
 }
 
 export function getParticipant(userId: string, environment: Environment = currentEnvironment) {

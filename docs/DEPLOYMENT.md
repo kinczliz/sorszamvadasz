@@ -12,7 +12,9 @@
 8. Grant access only to the trusted festival group. Use the narrowest Google account/domain setting that includes every participant; if anonymous participant access is required, understand that the API uses lightweight UUID recognition rather than authentication.
 9. Deploy and copy the Web App URL ending in `/exec`.
 10. Set `SORSZAMVADASZ_API_URL` as shown in `apps-script/CURL_EXAMPLES.md`, then run its smoke tests in this order:
-   register, duplicate register, getParticipant, syncSelections, getParticipant again, getDayStatus.
+   register, identical registration retry, different-ID duplicate register, getParticipant, syncSelections, getParticipant again, getDayStatus.
+
+The Users sheet migration adds a `registrationId` header as the final column without changing existing rows. Existing users may have a blank value.
 
 To update an existing web app after code changes, open **Deploy → Manage deployments**, select the web-app deployment, choose **Edit**, select **New version**, then deploy. Keep using the copied `/exec` URL unless Google changes it.
 

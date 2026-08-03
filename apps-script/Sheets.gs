@@ -31,7 +31,14 @@ function getProgrammeMetricsSheet() {
 }
 
 function ensureUsersSheet() {
-  return getOrCreateSheet_(Config.SHEET_USERS, Config.USERS_HEADERS)
+  var sheet = getOrCreateSheet_(Config.SHEET_USERS, Config.USERS_HEADERS)
+  var registrationIdColumn = Config.USERS_HEADERS.indexOf('registrationId') + 1
+
+  if (sheet.getRange(1, registrationIdColumn).getValue() !== 'registrationId') {
+    sheet.getRange(1, registrationIdColumn).setValue('registrationId')
+  }
+
+  return sheet
 }
 
 function ensureSelectionsSheet() {

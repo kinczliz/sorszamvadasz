@@ -123,11 +123,13 @@ The display name remains visible in the user interface.
 When a device has no stored user UUID:
 
 1. The participant enters a display name.
-2. The frontend sends the display name and active EventSet to the backend.
+2. The frontend generates and retains a registration UUID, then sends it with the display name and active EventSet to the backend.
 3. The backend checks whether the display name is available.
 4. If available, the backend creates the User and returns its UUID.
 5. The frontend stores the UUID and display name locally.
 6. Existing local selections are uploaded for that new User.
+
+If the browser cannot confirm the response, it retries with the same registration UUID. The backend returns the originally created User instead of treating the retry as a duplicate name. Editing the entered display name starts a new registration attempt with a new UUID.
 
 ---
 

@@ -16,7 +16,7 @@ var Config = {
   PROGRAMME_DATA_URL: 'https://raw.githubusercontent.com/kinczliz/sorszamvadasz/main/data/2026/programs.json',
   PROGRAMME_CACHE_TTL_SECONDS: 300,
   REGISTRATION_LOCK_TIMEOUT_MS: 5000,
-  USERS_HEADERS: ['id', 'environment', 'displayName', 'displayNameKey', 'createdAt', 'lastSeen'],
+  USERS_HEADERS: ['id', 'environment', 'displayName', 'displayNameKey', 'createdAt', 'lastSeen', 'registrationId'],
   SELECTIONS_HEADERS: ['id', 'userId', 'environment', 'programmeId', 'priority', 'createdAt', 'updatedAt'],
   VOLUNTEERS_HEADERS: ['id', 'userId', 'environment', 'date', 'active', 'createdAt', 'updatedAt'],
   DAY_STATES_HEADERS: ['environment', 'date', 'state', 'updatedAt'],

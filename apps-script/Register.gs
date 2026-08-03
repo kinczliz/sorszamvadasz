@@ -16,6 +16,17 @@ function registerParticipant(payload) {
       var usersSheet = ensureUsersSheet()
       var selectionsSheet = ensureSelectionsSheet()
 
+      var existingUser = findRegistrationUser_(usersSheet, validation.environment, validation.registrationId)
+
+      if (existingUser) {
+        info('Registration retry succeeded.')
+        return success({
+          user: { id: existingUser.id, displayName: existingUser.displayName },
+          selections: loadParticipantSelections(selectionsSheet, validation.environment, existingUser.id),
+          serverTime: new Date().toISOString(),
+        })
+      }
+
       if (hasDisplayName(usersSheet, validation.environment, validation.displayNameKey)) {
         warn('Duplicate display name rejected.')
         return failure('DISPLAY_NAME_TAKEN', 'Display name is already in use.')
@@ -33,6 +44,7 @@ function registerParticipant(payload) {
           validation.displayNameKey,
           now,
           now,
+          validation.registrationId,
         ])
       } catch (exception) {
         removeSelectionsForUser(selectionsSheet, userId)
@@ -55,7 +67,7 @@ function registerParticipant(payload) {
 }
 
 function validateRegistration(payload) {
-  var missingFields = getMissingRequiredFields(payload, ['environment', 'displayName', 'selections'])
+  var missingFields = getMissingRequiredFields(payload, ['environment', 'displayName', 'selections', 'registrationId'])
 
   if (missingFields.length > 0) {
     return registrationError_('INVALID_REQUEST', 'Missing required field: ' + missingFields[0] + '.')
@@ -71,6 +83,10 @@ function validateRegistration(payload) {
     return registrationError_('INVALID_DISPLAY_NAME', 'Display name is empty or invalid.')
   }
 
+  if (!isUuid(payload.registrationId)) {
+    return registrationError_('INVALID_REQUEST', 'Registration identifier must be a valid UUID.')
+  }
+
   var selectionsValidation = validateInitialSelections(payload.selections)
 
   if (selectionsValidation.error) {
@@ -81,8 +97,23 @@ function validateRegistration(payload) {
     environment: payload.environment,
     displayName: displayName,
     displayNameKey: displayName.toLocaleLowerCase('hu-HU'),
+    registrationId: payload.registrationId.toLowerCase(),
     selections: selectionsValidation.selections,
   }
+}
+
+function findRegistrationUser_(sheet, environment, registrationId) {
+  if (sheet.getLastRow() < 2) return null
+
+  var rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, Config.USERS_HEADERS.length).getValues()
+  for (var index = 0; index < rows.length; index += 1) {
+    var row = rows[index]
+    if (row[1] === environment && typeof row[6] === 'string' && row[6].toLowerCase() === registrationId) {
+      return { id: row[0], displayName: row[2] }
+    }
+  }
+
+  return null
 }
 
 function normalizeDisplayName(value) {

@@ -111,6 +111,7 @@ POST /register
 {
   "environment": "LIVE",
   "displayName": "Zoli Cisco",
+  "registrationId": "registration-uuid",
   "selections": {
     "programme-uuid-1": "WANT",
     "programme-uuid-2": "IF_AVAILABLE"
@@ -128,6 +129,7 @@ The backend must validate:
 * non-empty display name
 * display-name length
 * display-name uniqueness within the environment
+* UUID-shaped registration ID
 * programme IDs
 * selection priority values
 * daily ❤️ and 💛 limits
@@ -163,6 +165,10 @@ The backend must validate:
   }
 }
 ```
+
+Repeating a request with the same `environment` and `registrationId` returns the
+originally created participant and their current selections. A different
+registration ID still enforces normal display-name uniqueness.
 
 Suggested participant UI:
 

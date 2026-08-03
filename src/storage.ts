@@ -6,6 +6,24 @@ const storageKeys = {
   displayName: 'sorszamvadasz.displayName',
   selections: 'sorszamvadasz.selections',
   pendingSync: 'sorszamvadasz.pendingSync',
+  registrationId: 'sorszamvadasz.registrationId',
+}
+
+export function getPendingRegistrationId(): string | null {
+  return getStoredString(storageKeys.registrationId)
+}
+
+export function savePendingRegistrationId(registrationId: string): boolean {
+  return saveStoredString(storageKeys.registrationId, registrationId)
+}
+
+export function clearPendingRegistrationId(): boolean {
+  try {
+    window.localStorage.removeItem(storageKeys.registrationId)
+    return true
+  } catch {
+    return false
+  }
 }
 
 function isSelectionPriority(value: unknown): value is SelectionPriority {

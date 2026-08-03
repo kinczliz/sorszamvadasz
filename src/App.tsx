@@ -7,11 +7,14 @@ import VolunteerMode from './VolunteerMode'
 import { currentEnvironment } from './config'
 import {
   clearUserId,
+  clearPendingRegistrationId,
   getPendingSync,
+  getPendingRegistrationId,
   getStoredDisplayName,
   getStoredSelections,
   getStoredUserId,
   saveDisplayName,
+  savePendingRegistrationId,
   savePendingSync,
   saveSelections,
   saveUserId,
@@ -22,6 +25,14 @@ const duplicateNameMessage = 'Ez a név már használatban van.\n\nKérlek vála
 const temporaryRegistrationMessage = 'Most nem érjük el a közös rendszert.\n\nPróbáld újra egy kicsit később.'
 const temporarySyncMessage = 'A módosítás elmentve ezen az eszközön.\n\nA közös rendszerrel később szinkronizáljuk.'
 const missingConfigurationMessage = 'A közös rendszer címe nincs beállítva.'
+
+function createRegistrationId() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+
+  return 'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16))
+}
 
 function ParticipantApp() {
   const [userId, setUserId] = useState(getStoredUserId)
@@ -155,14 +166,17 @@ function ParticipantApp() {
     }
 
     setIsRegistering(true)
+    const registrationId = getPendingRegistrationId() ?? createRegistrationId()
+    savePendingRegistrationId(registrationId)
 
     try {
-      const response = await register(nextDisplayName, selections)
+      const response = await register(nextDisplayName, selections, registrationId)
 
       saveUserId(response.user.id)
       saveDisplayName(response.user.displayName)
       saveSelections(response.selections)
       savePendingSync(false)
+      clearPendingRegistrationId()
       setUserId(response.user.id)
       setDisplayName(response.user.displayName)
       setSelections(response.selections)
@@ -217,6 +231,7 @@ function ParticipantApp() {
             type="text"
             value={draftName}
             onChange={(event) => {
+              if (event.target.value !== draftName) clearPendingRegistrationId()
               setDraftName(event.target.value)
               setErrorMessage('')
             }}

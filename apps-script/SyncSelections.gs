@@ -178,11 +178,31 @@ function selectionMapsEqual(first, second) {
 }
 
 function replaceParticipantSelections(sheet, environment, userId, selections, now) {
+  var existingRows = getParticipantSelectionRowsForReplacement_(sheet, environment, userId)
   var replacementRows = Object.keys(selections).map(function (programmeId) {
+    var existing = existingRows[programmeId]
+
+    if (existing && existing[4] === selections[programmeId]) {
+      return existing
+    }
+
     return [Utilities.getUuid(), userId, environment, programmeId, selections[programmeId], now, now]
   })
 
   return replaceParticipantOwnedRows_(sheet, environment, userId, replacementRows)
+}
+
+function getParticipantSelectionRowsForReplacement_(sheet, environment, userId) {
+  if (sheet.getLastRow() < 2) return {}
+
+  var rowsByProgrammeId = {}
+  sheet.getRange(2, 1, sheet.getLastRow() - 1, Config.SELECTIONS_HEADERS.length).getValues().forEach(function (row) {
+    if (row[1] !== userId || row[2] !== environment) return
+    if (rowsByProgrammeId[row[3]]) throw new Error('Selection replacement source is invalid.')
+    rowsByProgrammeId[row[3]] = row
+  })
+
+  return rowsByProgrammeId
 }
 
 function restoreParticipantSelectionRows_(sheet, environment, userId, rows) {

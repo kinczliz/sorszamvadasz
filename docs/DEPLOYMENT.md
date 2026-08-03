@@ -14,6 +14,14 @@
 10. Set `SORSZAMVADASZ_API_URL` as shown in `apps-script/CURL_EXAMPLES.md`, then run its smoke tests in this order:
    register, identical registration retry, different-ID duplicate register, getParticipant, syncSelections, getParticipant again, getDayStatus.
 
+## Volunteer requestor access code
+
+1. In the Apps Script project, open **Project Settings**.
+2. Under **Script properties**, add `VOLUNTEER_ACCESS_CODE`.
+3. Set it to the shared code for trusted volunteers; do not add this value to source control or documentation.
+4. Redeploy the web app after adding or changing the property.
+5. Share the code only with trusted volunteers. Rotate the Script Property value immediately if it is disclosed.
+
 The Users sheet migration adds a `registrationId` header as the final column without changing existing rows. Existing users may have a blank value.
 
 To update an existing web app after code changes, open **Deploy → Manage deployments**, select the web-app deployment, choose **Edit**, select **New version**, then deploy. Keep using the copied `/exec` URL unless Google changes it.

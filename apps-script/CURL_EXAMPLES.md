@@ -282,3 +282,33 @@ curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-
 {"action":"setVolunteerStatus","payload":{"environment":"LIVE","userId":"USER_UUID","date":"2026-08-04","active":true}}
 JSON
 ```
+
+Programme requestors setup:
+
+```bash
+export VOLUNTEER_ACCESS_CODE="..."
+```
+
+Successful programme requestor lookup:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary @- <<JSON | python3 -m json.tool
+{"action":"getProgrammeRequestors","payload":{"environment":"LIVE","programmeId":"7a4e2012-f5c7-5a39-b8bb-d8d8b1a87505","accessCode":"$VOLUNTEER_ACCESS_CODE"}}
+JSON
+```
+
+Wrong volunteer access code:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary @- <<'JSON' | python3 -m json.tool
+{"action":"getProgrammeRequestors","payload":{"environment":"LIVE","programmeId":"7a4e2012-f5c7-5a39-b8bb-d8d8b1a87505","accessCode":"wrong-code"}}
+JSON
+```
+
+Invalid programme ID:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary @- <<JSON | python3 -m json.tool
+{"action":"getProgrammeRequestors","payload":{"environment":"LIVE","programmeId":"00000000-0000-4000-8000-000000000000","accessCode":"$VOLUNTEER_ACCESS_CODE"}}
+JSON
+```

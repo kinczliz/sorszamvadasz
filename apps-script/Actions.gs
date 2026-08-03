@@ -18,6 +18,8 @@ function dispatchAction(request) {
       return getVolunteerOverview(request.payload)
     case 'setVolunteerStatus':
       return setVolunteerStatus(request.payload)
+    case 'getProgrammeRequestors':
+      return getProgrammeRequestors(request.payload)
     default:
       return failure('UNKNOWN_ACTION', 'Unsupported action: ' + request.action + '.')
   }

@@ -80,7 +80,7 @@ Backend error messages are intended for diagnostics and need not be displayed di
 
 # API Endpoints
 
-The participant and volunteer MVP requires five operations:
+The participant and volunteer MVP requires seven operations:
 
 1. Register participant
 2. Load participant state
@@ -88,6 +88,7 @@ The participant and volunteer MVP requires five operations:
 4. Load daily status
 5. Load volunteer overview
 6. Set volunteer status
+7. Load programme requestors
 
 Google Apps Script may expose these through one web-app URL using an `action` field rather than literal REST paths.
 
@@ -462,6 +463,62 @@ Mixed, partial, or malformed published snapshots fail with `SERVER_ERROR`.
 
 ---
 
+# Load Programme Requestors
+
+Returns the current requestors for one active programme. This volunteer-only
+operation is read-only and returns names only after a valid shared volunteer
+access code is supplied.
+
+## Logical endpoint
+
+```text
+POST /programme-requestors
+```
+
+## Request
+
+```json
+{
+  "environment": "LIVE",
+  "programmeId": "programme-uuid-1",
+  "accessCode": "shared-volunteer-code"
+}
+```
+
+`accessCode` is compared exactly with the `VOLUNTEER_ACCESS_CODE` Apps Script
+Script Property. The property value is never returned or logged.
+
+## Success response
+
+```json
+{
+  "ok": true,
+  "data": {
+    "programmeId": "programme-uuid-1",
+    "want": [
+      { "displayName": "Anna" }
+    ],
+    "ifAvailable": [
+      { "displayName": "Béla" }
+    ],
+    "serverTime": "2026-08-04T08:15:00+02:00"
+  }
+}
+```
+
+The `want` and `ifAvailable` arrays are ordered by the timestamp at which the
+participant entered their current priority, oldest first. Equal timestamps are
+ordered by display name. Changing `WANT → IF_AVAILABLE → WANT` therefore
+places the participant at the end of the WANT list.
+
+Only `displayName` and the priority implied by the response list are exposed.
+The response never includes user IDs, selection IDs, registration IDs, or
+individual timestamps. Missing or incorrect access codes, including an absent
+Script Property, return `ACCESS_DENIED` without revealing which condition
+applied.
+
+---
+
 # Set Volunteer Status
 
 Creates or updates the recognized participant's day-specific volunteer record.
@@ -588,6 +645,7 @@ Minimum participant API error codes:
 | `DAILY_LIMIT_EXCEEDED` | Daily ❤️ or 💛 limit exceeded    |
 | `DAY_NOT_OPEN`         | Participant writes are locked    |
 | `DAY_FINISHED`         | Volunteer status is locked       |
+| `ACCESS_DENIED`        | Volunteer access code is invalid |
 | `SERVER_ERROR`         | Unexpected backend error         |
 
 The backend must not return stack traces or internal spreadsheet details to clients.
@@ -620,6 +678,7 @@ syncSelections
 getDayStatus
 getVolunteerOverview
 setVolunteerStatus
+getProgrammeRequestors
 ```
 
 This avoids building unnecessary routing infrastructure while preserving clear logical operations.

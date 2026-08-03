@@ -32,6 +32,13 @@ export type VolunteerOverview = {
   serverTime: string
 }
 
+export type ProgrammeRequestors = {
+  programmeId: string
+  want: Array<{ displayName: string }>
+  ifAvailable: Array<{ displayName: string }>
+  serverTime: string
+}
+
 type ApiErrorCode =
   | 'CONFIGURATION'
   | 'NETWORK_ERROR'
@@ -151,6 +158,10 @@ export function getDayStatus(environment: Environment = currentEnvironment) {
 
 export function getVolunteerOverview(environment: Environment, date: string) {
   return request<VolunteerOverview>('getVolunteerOverview', { environment, date })
+}
+
+export function getProgrammeRequestors(environment: Environment, programmeId: string, accessCode: string) {
+  return request<ProgrammeRequestors>('getProgrammeRequestors', { environment, programmeId, accessCode })
 }
 
 export function setVolunteerStatus(environment: Environment, userId: string, date: string, active: boolean) {

@@ -74,3 +74,33 @@ Volunteers are expected to coordinate directly while queueing.
 The application provides hourly planning information, not real-time inventory tracking.
 
 ---
+
+Incident analysis (Beta)
+Affected participant (redacted)
+Observed:
+
+Transaction A
+-------------
+9 WANT
+timestamp = T1
+
+Transaction B
+-------------
+9 WANT
+1 IF_AVAILABLE
+timestamp = T2
+
+
+Expected after Transaction B:
+9 WANT
+1 IF_AVAILABLE
+
+
+Actual:
+9 WANT (T1)
+9 WANT (T2)
+1 IF_AVAILABLE (T2)
+
+Conclusion:
+Transaction B did not replace Transaction A.
+It appended after an incomplete deletion.

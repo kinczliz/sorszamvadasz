@@ -178,61 +178,15 @@ function selectionMapsEqual(first, second) {
 }
 
 function replaceParticipantSelections(sheet, environment, userId, selections, now) {
-  var previousRows = getParticipantSelectionRows_(sheet, environment, userId)
-
-  try {
-    removeParticipantSelectionRows_(sheet, environment, userId)
-    appendSelectionRows_(sheet, userId, environment, selections, now)
-  } catch (exception) {
-    restoreParticipantSelectionRows_(sheet, environment, userId, previousRows)
-    info('Selection synchronization rollback performed.')
-    throw exception
-  }
-
-  return previousRows
-}
-
-function getParticipantSelectionRows_(sheet, environment, userId) {
-  if (sheet.getLastRow() < 2) {
-    return []
-  }
-
-  return sheet
-    .getRange(2, 1, sheet.getLastRow() - 1, Config.SELECTIONS_HEADERS.length)
-    .getValues()
-    .filter(function (row) { return row[1] === userId && row[2] === environment })
-}
-
-function removeParticipantSelectionRows_(sheet, environment, userId) {
-  for (var row = sheet.getLastRow(); row >= 2; row -= 1) {
-    var values = sheet.getRange(row, 1, 1, Config.SELECTIONS_HEADERS.length).getValues()[0]
-
-    if (values[1] === userId && values[2] === environment) {
-      sheet.deleteRow(row)
-    }
-  }
-}
-
-function appendSelectionRows_(sheet, userId, environment, selections, now) {
-  var programmeIds = Object.keys(selections)
-
-  if (programmeIds.length === 0) {
-    return
-  }
-
-  var rows = programmeIds.map(function (programmeId) {
+  var replacementRows = Object.keys(selections).map(function (programmeId) {
     return [Utilities.getUuid(), userId, environment, programmeId, selections[programmeId], now, now]
   })
 
-  sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, Config.SELECTIONS_HEADERS.length).setValues(rows)
+  return replaceParticipantOwnedRows_(sheet, environment, userId, replacementRows)
 }
 
 function restoreParticipantSelectionRows_(sheet, environment, userId, rows) {
-  removeParticipantSelectionRows_(sheet, environment, userId)
-
-  if (rows.length > 0) {
-    sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, Config.SELECTIONS_HEADERS.length).setValues(rows)
-  }
+  restoreParticipantOwnedRows_(sheet, rows)
 }
 
 function isPlainObject_(value) {

@@ -38,7 +38,8 @@ function deleteParticipantReset() {
 
     try {
       relatedSheets.forEach(function (entry) {
-        deleteParticipantOwnedRows_(entry.sheet(), target)
+        var sheet = entry.sheet()
+        if (sheet) replaceParticipantOwnedRows_(sheet, target.environment, target.userId, [])
       })
       deleteSheetRows_(usersSheet, function (row) {
         return String(row[0]).toLowerCase() === target.userId && row[1] === target.environment
@@ -83,13 +84,6 @@ function countParticipantOwnedRows_(sheet, target) {
   return sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues().filter(function (row) {
     return row[1] === target.userId && row[2] === target.environment
   }).length
-}
-
-function deleteParticipantOwnedRows_(sheet, target) {
-  if (!sheet) return
-  deleteSheetRows_(sheet, function (row) {
-    return row[1] === target.userId && row[2] === target.environment
-  })
 }
 
 function deleteSheetRows_(sheet, matches) {

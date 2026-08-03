@@ -47,7 +47,7 @@ function registerParticipant(payload) {
           validation.registrationId,
         ])
       } catch (exception) {
-        removeSelectionsForUser(selectionsSheet, userId)
+        replaceParticipantOwnedRows_(selectionsSheet, validation.environment, userId, [])
         throw exception
       }
 
@@ -182,14 +182,6 @@ function storeInitialSelections(sheet, userId, environment, selections, now) {
   })
 
   sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, Config.SELECTIONS_HEADERS.length).setValues(rows)
-}
-
-function removeSelectionsForUser(sheet, userId) {
-  for (var row = sheet.getLastRow(); row >= 2; row -= 1) {
-    if (sheet.getRange(row, 2).getValue() === userId) {
-      sheet.deleteRow(row)
-    }
-  }
 }
 
 function registrationError_(code, message) {

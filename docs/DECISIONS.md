@@ -49,3 +49,18 @@ This improves the quality of demand estimation and encourages thoughtful choices
 
 💛 selections provide additional flexibility without influencing demand metrics.
 
+---
+
+Decision #003
+
+The backend stores participant state, not participant actions.
+
+Each synchronization replaces the complete current selection set.
+
+The system intentionally avoids event sourcing and incremental updates.
+
+Reason
+
+The participant frontend already owns the complete current state.
+
+Replacing state is simpler, naturally idempotent and easier to recover after temporary failures.

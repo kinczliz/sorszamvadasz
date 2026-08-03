@@ -16,6 +16,19 @@ npm run dev
 
 Vite prints the local development URL in the terminal. Open it in a browser.
 
+## Backend configuration
+
+The participant app requires an Apps Script Web App URL. Copy `.env.example` to
+`.env.local` and set `VITE_SORSZAMVADASZ_API_URL` to the deployed `/exec` URL:
+
+```bash
+cp .env.example .env.local
+```
+
+The local frontend shows a clear unavailable-system message until this value is
+configured. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the bound Apps Script
+setup and smoke-test sequence.
+
 ## Available commands
 
 - `npm run dev` — starts the local development server

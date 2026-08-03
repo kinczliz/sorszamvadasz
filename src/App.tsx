@@ -1,25 +1,131 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
+import { ApiError, getDayStatus, getParticipant, register, syncSelections } from './api'
+import type { DayStatus } from './api'
 import ProgrammeBrowser from './ProgrammeBrowser'
+import {
+  clearUserId,
+  getPendingSync,
+  getStoredDisplayName,
+  getStoredSelections,
+  getStoredUserId,
+  saveDisplayName,
+  savePendingSync,
+  saveSelections,
+  saveUserId,
+} from './storage'
+import type { Selections } from './storage'
 
-const displayNameStorageKey = 'sorszamvadasz.displayName'
-
-function getStoredDisplayName(): string | null {
-  try {
-    const displayName = window.localStorage.getItem(displayNameStorageKey)?.trim()
-
-    return displayName || null
-  } catch {
-    return null
-  }
-}
+const duplicateNameMessage = 'Ez a név már használatban van.\n\nKérlek válassz egy olyan nevet,\namiről a többiek biztosan felismernek.'
+const temporaryRegistrationMessage = 'Most nem érjük el a közös rendszert.\n\nPróbáld újra egy kicsit később.'
+const temporarySyncMessage = 'A módosítás elmentve ezen az eszközön.\n\nA közös rendszerrel később szinkronizáljuk.'
+const missingConfigurationMessage = 'A közös rendszer címe nincs beállítva.'
 
 function App() {
+  const [userId, setUserId] = useState(getStoredUserId)
   const [displayName, setDisplayName] = useState(getStoredDisplayName)
-  const [draftName, setDraftName] = useState('')
+  const [selections, setSelections] = useState(getStoredSelections)
+  const [dayStatuses, setDayStatuses] = useState<Record<string, DayStatus>>({})
+  const [draftName, setDraftName] = useState(getStoredDisplayName() ?? '')
   const [errorMessage, setErrorMessage] = useState('')
+  const [syncMessage, setSyncMessage] = useState('')
+  const [isRegistering, setIsRegistering] = useState(false)
+  const syncAttempt = useRef(0)
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    void loadDayStatus()
+
+    if (userId) {
+      void loadParticipant(userId, getPendingSync())
+    }
+  }, [])
+
+  async function loadDayStatus() {
+    try {
+      const response = await getDayStatus()
+      setDayStatuses(Object.fromEntries(response.days.map((day) => [day.date, day])))
+    } catch {
+      // The programme remains usable with its existing local presentation.
+    }
+  }
+
+  async function loadParticipant(storedUserId: string, retryPendingSync: boolean) {
+    const localSelections = getStoredSelections()
+
+    try {
+      const response = await getParticipant(storedUserId)
+
+      setDisplayName(response.user.displayName)
+      setSelections(response.selections)
+      saveDisplayName(response.user.displayName)
+      saveSelections(response.selections)
+      setDayStatuses((current) => Object.fromEntries(
+        Object.entries(response.dayStates).map(([date, state]) => [
+          date,
+          { ...current[date], date, state },
+        ]),
+      ))
+
+      if (retryPendingSync) {
+        setSelections(localSelections)
+        saveSelections(localSelections)
+        void synchronizeSelections(storedUserId, localSelections)
+      }
+    } catch (exception) {
+      if (exception instanceof ApiError && exception.code === 'USER_NOT_FOUND') {
+        clearUserId()
+        setUserId(null)
+        setDraftName(getStoredDisplayName() ?? '')
+        return
+      }
+
+      setSyncMessage('A közös rendszer átmenetileg nem érhető el.')
+    }
+  }
+
+  async function synchronizeSelections(activeUserId: string, nextSelections: Selections) {
+    const attempt = ++syncAttempt.current
+
+    try {
+      const response = await syncSelections(activeUserId, nextSelections)
+
+      if (attempt === syncAttempt.current) {
+        setSelections(response.selections)
+        saveSelections(response.selections)
+        savePendingSync(false)
+        setSyncMessage('')
+      }
+    } catch (exception) {
+      if (attempt !== syncAttempt.current) {
+        return
+      }
+
+      if (exception instanceof ApiError && (exception.code === 'DAILY_LIMIT_EXCEEDED' || exception.code === 'DAY_NOT_OPEN')) {
+        savePendingSync(false)
+        await loadParticipant(activeUserId, false)
+        return
+      }
+
+      savePendingSync(true)
+      setSyncMessage(temporarySyncMessage)
+    }
+  }
+
+  function handleSelectionsChange(nextSelections: Selections): boolean {
+    if (!saveSelections(nextSelections)) {
+      return false
+    }
+
+    setSelections(nextSelections)
+
+    if (userId) {
+      void synchronizeSelections(userId, nextSelections)
+    }
+
+    return true
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const nextDisplayName = draftName.trim()
@@ -29,16 +135,44 @@ function App() {
       return
     }
 
+    setIsRegistering(true)
+
     try {
-      window.localStorage.setItem(displayNameStorageKey, nextDisplayName)
-      setDisplayName(nextDisplayName)
-    } catch {
-      setErrorMessage('A nevedet most nem tudtuk elmenteni ezen az eszközön.')
+      const response = await register(nextDisplayName, selections)
+
+      saveUserId(response.user.id)
+      saveDisplayName(response.user.displayName)
+      saveSelections(response.selections)
+      savePendingSync(false)
+      setUserId(response.user.id)
+      setDisplayName(response.user.displayName)
+      setSelections(response.selections)
+      setErrorMessage('')
+    } catch (exception) {
+      setErrorMessage(
+        exception instanceof ApiError
+          ? exception.code === 'DISPLAY_NAME_TAKEN'
+            ? duplicateNameMessage
+            : exception.code === 'CONFIGURATION'
+              ? missingConfigurationMessage
+              : temporaryRegistrationMessage
+          : temporaryRegistrationMessage,
+      )
+    } finally {
+      setIsRegistering(false)
     }
   }
 
-  if (displayName) {
-    return <ProgrammeBrowser displayName={displayName} />
+  if (userId && displayName) {
+    return (
+      <ProgrammeBrowser
+        displayName={displayName}
+        selections={selections}
+        dayStatuses={dayStatuses}
+        syncMessage={syncMessage}
+        onSelectionsChange={handleSelectionsChange}
+      />
+    )
   }
 
   return (
@@ -67,7 +201,7 @@ function App() {
             }}
             autoComplete="name"
             autoCapitalize="words"
-            maxLength={80}
+            maxLength={40}
             placeholder="Például: Kovács Anna"
             aria-describedby={errorMessage ? 'name-hint name-error' : 'name-hint'}
             aria-invalid={Boolean(errorMessage)}
@@ -81,7 +215,9 @@ function App() {
               {errorMessage}
             </p>
           )}
-          <button type="submit">Tovább</button>
+          <button type="submit" disabled={isRegistering}>
+            {isRegistering ? 'Egy pillanat…' : 'Tovább'}
+          </button>
         </form>
       </section>
     </main>

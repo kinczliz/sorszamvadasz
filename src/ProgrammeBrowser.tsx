@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
+import type { DayStatus } from './api'
 import { getDailyChance } from './chances'
+import { festivalDayDates } from './config'
 import programs from './programs'
 import { selectionLimits } from './selectionLimits'
-import { clearSelections, getStoredSelections, saveSelections } from './selections'
-import type { SelectionPriority, Selections } from './selections'
+import type { SelectionPriority, Selections } from './storage'
 
 type ProgrammeBrowserProps = {
   displayName: string
+  selections: Selections
+  dayStatuses: Record<string, DayStatus>
+  syncMessage: string
+  onSelectionsChange: (selections: Selections) => boolean
 }
 
 type SelectionSummary = {
@@ -75,21 +80,27 @@ function SelectionSummary({
   )
 }
 
-function DailyChance({ day }: { day: string }) {
-  const chance = getDailyChance(day)
+function DailyChance({ dayStatus }: { dayStatus?: DayStatus }) {
+  const chance = getDailyChance(dayStatus?.chance)
 
   return (
     <p className="daily-chance">
       <span>Esély</span>
       <span>{chance.icon}</span>
       <span>{chance.label}</span>
+      {dayStatus && dayStatus.state !== 'OPEN' && <span>· Kérések lezárva</span>}
     </p>
   )
 }
 
-function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
+function ProgrammeBrowser({
+  displayName,
+  selections,
+  dayStatuses,
+  syncMessage,
+  onSelectionsChange,
+}: ProgrammeBrowserProps) {
   const programsByDay = groupProgramsByDay()
-  const [selections, setSelections] = useState(getStoredSelections)
   const [statusMessage, setStatusMessage] = useState('')
   const [limitMessage, setLimitMessage] = useState<LimitMessage | null>(null)
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false)
@@ -151,12 +162,11 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
       nextSelections[eventId] = priority
     }
 
-    if (!saveSelections(nextSelections)) {
+    if (!onSelectionsChange(nextSelections)) {
       setStatusMessage('A választást most nem tudtuk elmenteni ezen az eszközön.')
       return
     }
 
-    setSelections(nextSelections)
     setLimitMessage(null)
     setStatusMessage(
       isRemovingSelection
@@ -166,12 +176,11 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
   }
 
   function resetSelections() {
-    if (!clearSelections()) {
+    if (!onSelectionsChange({})) {
       setStatusMessage('A kiválasztásokat most nem tudtuk törölni ezen az eszközön.')
       return
     }
 
-    setSelections({})
     setStatusMessage('Minden kiválasztás törölve.')
     setIsResetDialogOpen(false)
   }
@@ -205,12 +214,13 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
         <p className="selection-status" role="status" aria-live="polite">
           {statusMessage}
         </p>
+        {syncMessage && <p className="selection-status" role="status" aria-live="polite">{syncMessage}</p>}
 
         {[...programsByDay].map(([day, dayPrograms]) => (
           <section className="programme-day" key={day} aria-labelledby={`day-${day}`}>
             <div className="programme-day-header">
               <h3 id={`day-${day}`}>{day}</h3>
-              <DailyChance day={day} />
+              <DailyChance dayStatus={dayStatuses[festivalDayDates[day]]} />
               <SelectionSummary
                 summary={getSelectionSummary(
                   selections,
@@ -231,6 +241,7 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
                         type="button"
                         className={selections[program.id] === 'WANT' ? 'is-selected' : ''}
                         aria-pressed={selections[program.id] === 'WANT'}
+                        disabled={dayStatuses[festivalDayDates[program.day]]?.state !== undefined && dayStatuses[festivalDayDates[program.day]]?.state !== 'OPEN'}
                         onClick={() => updateSelection(program.id, program.day, 'WANT', program.title)}
                       >
                         Szeretném
@@ -239,6 +250,7 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
                         type="button"
                         className={selections[program.id] === 'IF_AVAILABLE' ? 'is-selected' : ''}
                         aria-pressed={selections[program.id] === 'IF_AVAILABLE'}
+                        disabled={dayStatuses[festivalDayDates[program.day]]?.state !== undefined && dayStatuses[festivalDayDates[program.day]]?.state !== 'OPEN'}
                         onClick={() => updateSelection(program.id, program.day, 'IF_AVAILABLE', program.title)}
                       >
                         Ha marad

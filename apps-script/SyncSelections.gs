@@ -71,7 +71,7 @@ function syncSelections(payload) {
       lock.releaseLock()
     }
   } catch (exception) {
-    error('Selection synchronization failed unexpectedly.')
+    logUnexpectedFailure('syncSelections', exception)
     return failure('SERVER_ERROR', 'Selections could not be synchronized.')
   }
 }

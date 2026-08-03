@@ -59,3 +59,18 @@ function getProgrammeDays() {
   cache.put('programme-days', JSON.stringify(programmeDays), Config.PROGRAMME_CACHE_TTL_SECONDS)
   return programmeDays
 }
+
+function testProgrammeDataLoading() {
+  var programmeDays = getProgrammeDays()
+  var programmeIds = Object.keys(programmeDays)
+  var firstProgrammeId = programmeIds[0]
+  var festivalDate = Config.PROGRAMME_DAY_DATES_2026[programmeDays[firstProgrammeId]]
+
+  info('Programme data diagnostic: active programmes=' + programmeIds.length)
+
+  if (!festivalDate) {
+    throw new Error('Programme day could not be mapped to a festival date.')
+  }
+
+  info('Programme data diagnostic: first programme id=' + firstProgrammeId + '; festival date=' + festivalDate)
+}

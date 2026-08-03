@@ -26,3 +26,14 @@ To update an existing web app after code changes, open **Deploy → Manage deplo
 4. Deploy the generated `dist/` directory with the environment variable set in the frontend host's build configuration.
 
 The deployment URL is public configuration, not a secret, but it must not be committed as a real project value. The Apps Script project requires Spreadsheet and URL Fetch authorization; URL Fetch is used for the official programme data.
+
+## Admin participant reset
+
+This is a manual recovery tool in `AdminParticipantReset.gs`, not a web endpoint.
+
+1. Set `ADMIN_RESET_ENVIRONMENT` and `ADMIN_RESET_USER_ID`.
+2. Run `previewParticipantReset()` and verify the logged display name and related-row counts.
+3. Set `ADMIN_RESET_CONFIRMATION = "DELETE"` and run `deleteParticipantReset()`.
+4. Clear the confirmation value immediately afterwards.
+5. Run `publishMetrics()` to refresh published counts.
+6. Ask the participant to clear site data or use a private window before registering again.

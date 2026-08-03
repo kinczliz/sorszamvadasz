@@ -10,8 +10,10 @@ type ProgrammeBrowserProps = {
   displayName: string
   selections: Selections
   dayStatuses: Record<string, DayStatus>
+  volunteerDays: string[]
   syncMessage: string
   onSelectionsChange: (selections: Selections) => boolean
+  onVolunteerStatusChange: (date: string, active: boolean) => Promise<void>
 }
 
 type SelectionSummary = {
@@ -97,8 +99,10 @@ function ProgrammeBrowser({
   displayName,
   selections,
   dayStatuses,
+  volunteerDays,
   syncMessage,
   onSelectionsChange,
+  onVolunteerStatusChange,
 }: ProgrammeBrowserProps) {
   const programsByDay = groupProgramsByDay()
   const [statusMessage, setStatusMessage] = useState('')
@@ -185,6 +189,16 @@ function ProgrammeBrowser({
     setIsResetDialogOpen(false)
   }
 
+  async function toggleVolunteerStatus(date: string) {
+    const active = !volunteerDays.includes(date)
+
+    try {
+      await onVolunteerStatusChange(date, active)
+    } catch {
+      // The parent restores the previously confirmed state.
+    }
+  }
+
   return (
     <main className="programme-browser" aria-labelledby="app-title">
       <header className="programme-header">
@@ -221,6 +235,17 @@ function ProgrammeBrowser({
             <div className="programme-day-header">
               <h3 id={`day-${day}`}>{day}</h3>
               <DailyChance dayStatus={dayStatuses[festivalDayDates[day]]} />
+              <div className="volunteer-control">
+                <button
+                  type="button"
+                  className={volunteerDays.includes(festivalDayDates[day]) ? 'is-selected' : ''}
+                  disabled={dayStatuses[festivalDayDates[day]]?.state === 'FINISHED'}
+                  aria-pressed={volunteerDays.includes(festivalDayDates[day])}
+                  onClick={() => void toggleVolunteerStatus(festivalDayDates[day])}
+                >
+                  {volunteerDays.includes(festivalDayDates[day]) ? `✓ ${day}: ÖNKÉNTES VAGYOK` : `${day}: önkéntes vagyok`}
+                </button>
+              </div>
               <SelectionSummary
                 summary={getSelectionSummary(
                   selections,

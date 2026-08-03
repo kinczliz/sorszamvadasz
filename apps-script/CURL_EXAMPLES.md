@@ -218,3 +218,51 @@ curl -sS -L "$SORSZAMVADASZ_API_URL" \
 {"action":"getVolunteerOverview","payload":{"environment":"LIVE","date":"2026-08-04"}}
 JSON
 ```
+
+Volunteer signup:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary @- <<'JSON' | python3 -m json.tool
+{"action":"setVolunteerStatus","payload":{"environment":"LIVE","userId":"USER_UUID","date":"2026-08-04","active":true}}
+JSON
+```
+
+Volunteer withdrawal:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary @- <<'JSON' | python3 -m json.tool
+{"action":"setVolunteerStatus","payload":{"environment":"LIVE","userId":"USER_UUID","date":"2026-08-04","active":false}}
+JSON
+```
+
+Duplicate signup / idempotent signup (repeat the signup request unchanged):
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary @- <<'JSON' | python3 -m json.tool
+{"action":"setVolunteerStatus","payload":{"environment":"LIVE","userId":"USER_UUID","date":"2026-08-04","active":true}}
+JSON
+```
+
+Unknown user:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary @- <<'JSON' | python3 -m json.tool
+{"action":"setVolunteerStatus","payload":{"environment":"LIVE","userId":"00000000-0000-4000-8000-000000000000","date":"2026-08-04","active":true}}
+JSON
+```
+
+Invalid date:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary @- <<'JSON' | python3 -m json.tool
+{"action":"setVolunteerStatus","payload":{"environment":"LIVE","userId":"USER_UUID","date":"2026-08-09","active":true}}
+JSON
+```
+
+FINISHED-day rejection (after setting the day state to `FINISHED`):
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary @- <<'JSON' | python3 -m json.tool
+{"action":"setVolunteerStatus","payload":{"environment":"LIVE","userId":"USER_UUID","date":"2026-08-04","active":true}}
+JSON
+```

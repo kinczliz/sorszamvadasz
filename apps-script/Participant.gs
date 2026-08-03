@@ -18,6 +18,7 @@ function getParticipant(payload) {
     }
 
     var selections = loadParticipantSelections(getSelectionsSheet(), validation.environment, validation.userId)
+    var volunteerDays = loadActiveVolunteerDays(getVolunteersSheet(), validation.environment, validation.userId)
     var dayStates = loadDayStates(ensureDayStatesSheet(), validation.environment)
     var now = new Date().toISOString()
 
@@ -27,6 +28,7 @@ function getParticipant(payload) {
     return success({
       user: { id: user.id, displayName: user.displayName },
       selections: selections,
+      volunteerDays: volunteerDays,
       dayStates: dayStates,
       serverTime: now,
     })

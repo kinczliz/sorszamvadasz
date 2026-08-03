@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
-import { ApiError, getDayStatus, getParticipant, register, syncSelections } from './api'
+import { ApiError, getDayStatus, getParticipant, register, setVolunteerStatus, syncSelections } from './api'
 import type { DayStatus } from './api'
 import ProgrammeBrowser from './ProgrammeBrowser'
 import VolunteerMode from './VolunteerMode'
+import { currentEnvironment } from './config'
 import {
   clearUserId,
   getPendingSync,
@@ -27,6 +28,7 @@ function ParticipantApp() {
   const [displayName, setDisplayName] = useState(getStoredDisplayName)
   const [selections, setSelections] = useState(getStoredSelections)
   const [dayStatuses, setDayStatuses] = useState<Record<string, DayStatus>>({})
+  const [volunteerDays, setVolunteerDays] = useState<string[]>([])
   const [draftName, setDraftName] = useState(getStoredDisplayName() ?? '')
   const [errorMessage, setErrorMessage] = useState('')
   const [syncMessage, setSyncMessage] = useState('')
@@ -58,6 +60,7 @@ function ParticipantApp() {
 
       setDisplayName(response.user.displayName)
       setSelections(response.selections)
+      setVolunteerDays(response.volunteerDays)
       saveDisplayName(response.user.displayName)
       saveSelections(response.selections)
       setDayStatuses((current) => Object.fromEntries(
@@ -81,6 +84,21 @@ function ParticipantApp() {
       }
 
       setSyncMessage('A közös rendszer átmenetileg nem érhető el.')
+    }
+  }
+
+  async function handleVolunteerStatusChange(date: string, active: boolean) {
+    if (!userId) return
+    const previousDays = volunteerDays
+    const nextDays = active ? [...new Set([...previousDays, date])].sort() : previousDays.filter((day) => day !== date)
+    setVolunteerDays(nextDays)
+
+    try {
+      const response = await setVolunteerStatus(currentEnvironment, userId, date, active)
+      setVolunteerDays((current) => response.active ? [...new Set([...current, response.date])].sort() : current.filter((day) => day !== response.date))
+    } catch (exception) {
+      setVolunteerDays(previousDays)
+      throw exception
     }
   }
 
@@ -170,8 +188,10 @@ function ParticipantApp() {
         displayName={displayName}
         selections={selections}
         dayStatuses={dayStatuses}
+        volunteerDays={volunteerDays}
         syncMessage={syncMessage}
         onSelectionsChange={handleSelectionsChange}
+        onVolunteerStatusChange={handleVolunteerStatusChange}
       />
     )
   }

@@ -38,6 +38,10 @@ function ensureSelectionsSheet() {
   return getOrCreateSheet_(Config.SHEET_SELECTIONS, Config.SELECTIONS_HEADERS)
 }
 
+function ensureVolunteersSheet() {
+  return getOrCreateSheet_(Config.SHEET_VOLUNTEERS, Config.VOLUNTEERS_HEADERS)
+}
+
 function ensureDayStatesSheet() {
   var sheet = getDayStatesSheet()
 

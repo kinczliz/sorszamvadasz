@@ -87,6 +87,7 @@ The participant and volunteer MVP requires five operations:
 3. Synchronize selections
 4. Load daily status
 5. Load volunteer overview
+6. Set volunteer status
 
 Google Apps Script may expose these through one web-app URL using an `action` field rather than literal REST paths.
 
@@ -216,6 +217,7 @@ POST is used to keep the implementation simple and avoid passing identifiers in 
       "2026-08-07": "OPEN",
       "2026-08-08": "OPEN"
     },
+    "volunteerDays": ["2026-08-04", "2026-08-06"],
     "serverTime": "2026-08-04T08:16:00+02:00"
   }
 }
@@ -454,6 +456,44 @@ Mixed, partial, or malformed published snapshots fail with `SERVER_ERROR`.
 
 ---
 
+# Set Volunteer Status
+
+Creates or updates the recognized participant's day-specific volunteer record.
+It does not change selections or calculate metrics.
+
+## Request
+
+```json
+{
+  "environment": "LIVE",
+  "userId": "user-uuid",
+  "date": "2026-08-04",
+  "active": true
+}
+```
+
+The date must be an official festival day and `active` must be a boolean.
+Changes are allowed for `OPEN`, `CLOSED`, and `QUEUEING` days, but fail with
+`DAY_FINISHED` for a finished day.
+
+## Success response
+
+```json
+{
+  "ok": true,
+  "data": {
+    "date": "2026-08-04",
+    "active": true,
+    "updatedAt": "2026-08-04T08:15:00+02:00"
+  }
+}
+```
+
+Repeated signup is idempotent. Withdrawing a day with no existing record also
+returns success without creating a record.
+
+---
+
 # Selection Model
 
 Selections are represented as an object keyed by programme ID.
@@ -541,6 +581,7 @@ Minimum participant API error codes:
 | `INVALID_PRIORITY`     | Unsupported selection value      |
 | `DAILY_LIMIT_EXCEEDED` | Daily ❤️ or 💛 limit exceeded    |
 | `DAY_NOT_OPEN`         | Participant writes are locked    |
+| `DAY_FINISHED`         | Volunteer status is locked       |
 | `SERVER_ERROR`         | Unexpected backend error         |
 
 The backend must not return stack traces or internal spreadsheet details to clients.
@@ -572,6 +613,7 @@ getParticipant
 syncSelections
 getDayStatus
 getVolunteerOverview
+setVolunteerStatus
 ```
 
 This avoids building unnecessary routing infrastructure while preserving clear logical operations.

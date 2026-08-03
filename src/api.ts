@@ -58,7 +58,14 @@ type ParticipantResponse = {
   user: { id: string; displayName: string }
   selections: Selections
   dayStates: Record<string, DayState>
+  volunteerDays: string[]
   serverTime: string
+}
+
+type VolunteerStatusResponse = {
+  date: string
+  active: boolean
+  updatedAt: string
 }
 
 type SyncResponse = {
@@ -144,4 +151,8 @@ export function getDayStatus(environment: Environment = currentEnvironment) {
 
 export function getVolunteerOverview(environment: Environment, date: string) {
   return request<VolunteerOverview>('getVolunteerOverview', { environment, date })
+}
+
+export function setVolunteerStatus(environment: Environment, userId: string, date: string, active: boolean) {
+  return request<VolunteerStatusResponse>('setVolunteerStatus', { environment, userId, date, active })
 }

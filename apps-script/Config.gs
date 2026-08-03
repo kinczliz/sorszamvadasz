@@ -18,7 +18,7 @@ var Config = {
   REGISTRATION_LOCK_TIMEOUT_MS: 5000,
   USERS_HEADERS: ['id', 'environment', 'displayName', 'displayNameKey', 'createdAt', 'lastSeen'],
   SELECTIONS_HEADERS: ['id', 'userId', 'environment', 'programmeId', 'priority', 'createdAt', 'updatedAt'],
-  VOLUNTEERS_HEADERS: ['id', 'userId', 'environment', 'date', 'active', 'startedAt', 'finishedAt'],
+  VOLUNTEERS_HEADERS: ['id', 'userId', 'environment', 'date', 'active', 'createdAt', 'updatedAt'],
   DAY_STATES_HEADERS: ['environment', 'date', 'state', 'updatedAt'],
   FESTIVAL_DATES_2026: ['2026-08-04', '2026-08-05', '2026-08-06', '2026-08-07', '2026-08-08'],
   PROGRAMME_DAY_DATES_2026: {

@@ -18,8 +18,8 @@ function getDayStatus(payload) {
         date: date,
         state: dayStates[date],
         chance: metrics.chance,
-        wantCount: metrics.wantCount,
-        ifAvailableCount: metrics.ifAvailableCount,
+        wantCount: metrics.wantTotal,
+        ifAvailableCount: metrics.ifAvailableTotal,
         volunteerCount: metrics.volunteerCount,
         capacity: metrics.capacity,
         metricsUpdatedAt: metrics.metricsUpdatedAt,
@@ -63,11 +63,11 @@ function loadDayMetrics(sheet, environment) {
 
     var date = formatDayStateDate_(row[1])
     var metrics = {
-      wantCount: row[2],
-      ifAvailableCount: row[3],
+      wantTotal: row[2],
+      ifAvailableTotal: row[3],
       volunteerCount: row[4],
       capacity: row[5],
-      chance: row[6],
+      chance: row[6] === '' ? null : row[6],
       metricsUpdatedAt: normalizeMetricsTimestamp_(row[7]),
     }
 
@@ -84,8 +84,8 @@ function loadDayMetrics(sheet, environment) {
 
 function emptyDayMetrics_() {
   return {
-    wantCount: 0,
-    ifAvailableCount: 0,
+    wantTotal: 0,
+    ifAvailableTotal: 0,
     volunteerCount: 0,
     capacity: 0,
     chance: null,
@@ -94,9 +94,14 @@ function emptyDayMetrics_() {
 }
 
 function isValidDayMetrics_(metrics) {
-  return [metrics.wantCount, metrics.ifAvailableCount, metrics.volunteerCount, metrics.capacity].every(function (value) {
+  var countsAreValid = [metrics.wantTotal, metrics.ifAvailableTotal, metrics.volunteerCount, metrics.capacity].every(function (value) {
     return Number.isInteger(value) && value >= 0
-  }) && Config.CHANCE_VALUES.indexOf(metrics.chance) !== -1 && Boolean(metrics.metricsUpdatedAt)
+  })
+  var chanceIsValid = metrics.capacity === 0
+    ? metrics.chance === null || metrics.chance === ''
+    : Config.CHANCE_VALUES.indexOf(metrics.chance) !== -1
+
+  return countsAreValid && chanceIsValid && Boolean(metrics.metricsUpdatedAt)
 }
 
 function normalizeMetricsTimestamp_(value) {

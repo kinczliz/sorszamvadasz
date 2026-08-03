@@ -26,6 +26,10 @@ function getDayMetricsSheet() {
   return getSheet_(Config.SHEET_DAY_METRICS)
 }
 
+function getProgrammeMetricsSheet() {
+  return getSheet_(Config.SHEET_PROGRAMME_METRICS)
+}
+
 function ensureUsersSheet() {
   return getOrCreateSheet_(Config.SHEET_USERS, Config.USERS_HEADERS)
 }

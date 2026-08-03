@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getDailyChance } from './chances'
 import programs from './programs'
+import { selectionLimits } from './selectionLimits'
 import { clearSelections, getStoredSelections, saveSelections } from './selections'
 import type { SelectionPriority, Selections } from './selections'
 
@@ -11,6 +12,11 @@ type ProgrammeBrowserProps = {
 type SelectionSummary = {
   want: number
   ifAvailable: number
+}
+
+type LimitMessage = {
+  eventId: string
+  priority: SelectionPriority
 }
 
 function groupProgramsByDay() {
@@ -40,16 +46,31 @@ function getSelectionSummary(selections: Selections, eventIds: string[]): Select
   )
 }
 
-function SelectionSummary({ summary, className = '' }: { summary: SelectionSummary; className?: string }) {
+function SelectionSummary({
+  summary,
+  dayCount = 1,
+  className = '',
+}: {
+  summary: SelectionSummary
+  dayCount?: number
+  className?: string
+}) {
+  const wantLimit = selectionLimits.maxWantPerDay * dayCount
+  const ifAvailableLimit = selectionLimits.maxIfAvailablePerDay * dayCount
+
   return (
     <p
       className={`selection-summary ${className}`}
-      aria-label={`${summary.want} Szeretném, ${summary.ifAvailable} Ha marad`}
+      aria-label={`${summary.want} / ${wantLimit} Szeretném, ${summary.ifAvailable} / ${ifAvailableLimit} Ha marad`}
     >
       <span aria-hidden="true">❤️</span>
-      <span>{summary.want}</span>
+      <span className={summary.want >= wantLimit ? 'is-limit-reached' : ''}>
+        {summary.want}/{wantLimit}
+      </span>
       <span aria-hidden="true">💛</span>
-      <span>{summary.ifAvailable}</span>
+      <span className={summary.ifAvailable >= ifAvailableLimit ? 'is-limit-reached' : ''}>
+        {summary.ifAvailable}/{ifAvailableLimit}
+      </span>
     </p>
   )
 }
@@ -70,6 +91,7 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
   const programsByDay = groupProgramsByDay()
   const [selections, setSelections] = useState(getStoredSelections)
   const [statusMessage, setStatusMessage] = useState('')
+  const [limitMessage, setLimitMessage] = useState<LimitMessage | null>(null)
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false)
   const resetDialogRef = useRef<HTMLDialogElement>(null)
   const overallSummary = getSelectionSummary(
@@ -77,6 +99,16 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
     programs.map((program) => program.id),
   )
   const hasSelections = overallSummary.want + overallSummary.ifAvailable > 0
+
+  useEffect(() => {
+    if (!limitMessage) {
+      return
+    }
+
+    const timeoutId = window.setTimeout(() => setLimitMessage(null), 3000)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [limitMessage])
 
   useEffect(() => {
     const dialog = resetDialogRef.current
@@ -94,10 +126,24 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
     }
   }, [isResetDialogOpen])
 
-  function updateSelection(eventId: string, priority: SelectionPriority, title: string) {
+  function updateSelection(eventId: string, day: string, priority: SelectionPriority, title: string) {
     const currentPriority = selections[eventId]
     const nextSelections = { ...selections }
     const isRemovingSelection = currentPriority === priority
+    const dayPrograms = programsByDay.get(day) ?? []
+    const daySummary = getSelectionSummary(
+      selections,
+      dayPrograms.map((program) => program.id),
+    )
+    const limit = priority === 'WANT'
+      ? selectionLimits.maxWantPerDay
+      : selectionLimits.maxIfAvailablePerDay
+    const selectionCount = priority === 'WANT' ? daySummary.want : daySummary.ifAvailable
+
+    if (!isRemovingSelection && selectionCount >= limit) {
+      setLimitMessage({ eventId, priority })
+      return
+    }
 
     if (isRemovingSelection) {
       delete nextSelections[eventId]
@@ -111,6 +157,7 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
     }
 
     setSelections(nextSelections)
+    setLimitMessage(null)
     setStatusMessage(
       isRemovingSelection
         ? `${title}: választás törölve.`
@@ -146,7 +193,11 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
             </button>
           )}
         </div>
-        <SelectionSummary summary={overallSummary} className="selection-summary-overall" />
+        <SelectionSummary
+          summary={overallSummary}
+          dayCount={programsByDay.size}
+          className="selection-summary-overall"
+        />
       </header>
 
       <section aria-labelledby="programme-title">
@@ -180,7 +231,7 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
                         type="button"
                         className={selections[program.id] === 'WANT' ? 'is-selected' : ''}
                         aria-pressed={selections[program.id] === 'WANT'}
-                        onClick={() => updateSelection(program.id, 'WANT', program.title)}
+                        onClick={() => updateSelection(program.id, program.day, 'WANT', program.title)}
                       >
                         Szeretném
                       </button>
@@ -188,11 +239,17 @@ function ProgrammeBrowser({ displayName }: ProgrammeBrowserProps) {
                         type="button"
                         className={selections[program.id] === 'IF_AVAILABLE' ? 'is-selected' : ''}
                         aria-pressed={selections[program.id] === 'IF_AVAILABLE'}
-                        onClick={() => updateSelection(program.id, 'IF_AVAILABLE', program.title)}
+                        onClick={() => updateSelection(program.id, program.day, 'IF_AVAILABLE', program.title)}
                       >
                         Ha marad
                       </button>
                     </div>
+                    {limitMessage?.eventId === program.id && (
+                      <p className="limit-notification" role="status" aria-live="polite">
+                        <span>Kis telhetetlen...</span>
+                        <span>Előbb törölj egy másik {limitMessage.priority === 'WANT' ? '❤️' : '💛'} jelölést.</span>
+                      </p>
+                    )}
                   </div>
                 </article>
               ))}

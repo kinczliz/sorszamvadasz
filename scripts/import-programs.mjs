@@ -52,6 +52,11 @@ function getProgramId(dayId) {
   return `${hash.slice(0, 8)}-${hash.slice(8, 12)}-5${hash.slice(13, 16)}-${variant}${hash.slice(17, 20)}-${hash.slice(20, 32)}`
 }
 
+const relativeInputPath = path.relative(process.cwd(), inputPath)
+const relativeOutputPath = path.relative(process.cwd(), outputPath)
+
+console.log(`Reading:\n  ${relativeInputPath}\n`)
+
 const [firstSheet] = await readXlsxFile(inputPath)
 
 if (!firstSheet) {
@@ -97,5 +102,15 @@ const programs = rows.map((row, index) => {
   }
 })
 
+const dayCount = new Set(programs.map((program) => program.day)).size
+
+console.log('✓ Workbook validated\n')
+console.log('Import summary')
+console.log('--------------')
+console.log(`Days              : ${dayCount}`)
+console.log(`Programmes        : ${programs.length}`)
+console.log('Validation errors : 0\n')
+
 await fs.writeFile(outputPath, `${JSON.stringify(programs, null, 2)}\n`)
-console.log(`Imported ${programs.length} programmes into ${path.relative(process.cwd(), outputPath)}.`)
+console.log(`Generated:\n  ${relativeOutputPath}\n`)
+console.log('✓ Ready to build.')

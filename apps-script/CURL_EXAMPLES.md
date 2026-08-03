@@ -35,4 +35,35 @@ curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
   -d '{"action":"register","payload":{"environment":"LIVE","displayName":"   ","selections":{}}}' \
   | python3 -m json.tool
 ```
+
+Successful participant lookup:
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"getParticipant","payload":{"environment":"LIVE","userId":"USER_UUID"}}' \
+  | python3 -m json.tool
+```
+
+Unknown participant:
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"getParticipant","payload":{"environment":"LIVE","userId":"00000000-0000-4000-8000-000000000000"}}' \
+  | python3 -m json.tool
+```
+
+Invalid environment:
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"getParticipant","payload":{"environment":"TEST","userId":"00000000-0000-4000-8000-000000000000"}}' \
+  | python3 -m json.tool
+```
+
+Malformed user ID:
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"getParticipant","payload":{"environment":"LIVE","userId":"not-a-uuid"}}' \
+  | python3 -m json.tool
 ```

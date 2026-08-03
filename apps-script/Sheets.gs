@@ -34,6 +34,41 @@ function ensureSelectionsSheet() {
   return getOrCreateSheet_(Config.SHEET_SELECTIONS, Config.SELECTIONS_HEADERS)
 }
 
+function ensureDayStatesSheet() {
+  var sheet = getDayStatesSheet()
+
+  if (sheet) {
+    return sheet
+  }
+
+  var lock = LockService.getScriptLock()
+  lock.waitLock(Config.DAY_STATE_LOCK_TIMEOUT_MS)
+
+  try {
+    sheet = getDayStatesSheet()
+
+    if (sheet) {
+      return sheet
+    }
+
+    sheet = getOrCreateSheet_(Config.SHEET_DAY_STATES, Config.DAY_STATES_HEADERS)
+    var now = new Date().toISOString()
+    var rows = []
+    var environments = [Config.ENV_LIVE, Config.ENV_DEMO]
+
+    environments.forEach(function (environment) {
+      Config.FESTIVAL_DATES_2026.forEach(function (date) {
+        rows.push([environment, date, Config.DAY_STATE_OPEN, now])
+      })
+    })
+
+    sheet.getRange(2, 1, rows.length, Config.DAY_STATES_HEADERS.length).setValues(rows)
+    return sheet
+  } finally {
+    lock.releaseLock()
+  }
+}
+
 function getSheet_(name) {
   return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name)
 }

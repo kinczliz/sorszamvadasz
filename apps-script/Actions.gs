@@ -8,9 +8,10 @@ function dispatchAction(request) {
   switch (request.action) {
     case 'register':
       return registerParticipant(request.payload)
+    case 'getParticipant':
+      return getParticipant(request.payload)
     case 'syncSelections':
     case 'getDayStatus':
-    case 'getParticipant':
       return failure('NOT_IMPLEMENTED', 'The ' + request.action + ' action is not implemented yet.')
     default:
       return failure('UNKNOWN_ACTION', 'Unsupported action: ' + request.action + '.')

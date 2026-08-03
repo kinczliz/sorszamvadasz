@@ -16,6 +16,22 @@ export type DayStatus = {
   metricsUpdatedAt: string | null
 }
 
+export type VolunteerOverview = {
+  date: string
+  state: DayState
+  volunteerCount: number
+  capacity: number
+  chance: Chance | null
+  metricsUpdatedAt: string | null
+  metricsVersion: string | null
+  programmes: Array<{
+    programmeId: string
+    wantCount: number
+    ifAvailableCount: number
+  }>
+  serverTime: string
+}
+
 type ApiErrorCode =
   | 'CONFIGURATION'
   | 'NETWORK_ERROR'
@@ -124,4 +140,8 @@ export function syncSelections(userId: string, selections: Selections, environme
 
 export function getDayStatus(environment: Environment = currentEnvironment) {
   return request<DayStatusResponse>('getDayStatus', { environment })
+}
+
+export function getVolunteerOverview(environment: Environment, date: string) {
+  return request<VolunteerOverview>('getVolunteerOverview', { environment, date })
 }

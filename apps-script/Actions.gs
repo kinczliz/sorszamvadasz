@@ -14,6 +14,8 @@ function dispatchAction(request) {
       return syncSelections(request.payload)
     case 'getDayStatus':
       return getDayStatus(request.payload)
+    case 'getVolunteerOverview':
+      return getVolunteerOverview(request.payload)
     default:
       return failure('UNKNOWN_ACTION', 'Unsupported action: ' + request.action + '.')
   }

@@ -9,3 +9,13 @@ export const festivalDayDates: Record<string, string> = {
   PÉNTEK: '2026-08-07',
   SZOMBAT: '2026-08-08',
 }
+
+export const festivalDayLabels: Record<string, string> = {
+  '2026-08-04': 'KEDD, augusztus 4.',
+  '2026-08-05': 'SZERDA, augusztus 5.',
+  '2026-08-06': 'CSÜTÖRTÖK, augusztus 6.',
+  '2026-08-07': 'PÉNTEK, augusztus 7.',
+  '2026-08-08': 'SZOMBAT, augusztus 8.',
+}
+
+export const festivalDates = Object.values(festivalDayDates)

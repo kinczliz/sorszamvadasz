@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import { ApiError, getDayStatus, getParticipant, register, syncSelections } from './api'
 import type { DayStatus } from './api'
 import ProgrammeBrowser from './ProgrammeBrowser'
+import VolunteerMode from './VolunteerMode'
 import {
   clearUserId,
   getPendingSync,
@@ -21,7 +22,7 @@ const temporaryRegistrationMessage = 'Most nem érjük el a közös rendszert.\n
 const temporarySyncMessage = 'A módosítás elmentve ezen az eszközön.\n\nA közös rendszerrel később szinkronizáljuk.'
 const missingConfigurationMessage = 'A közös rendszer címe nincs beállítva.'
 
-function App() {
+function ParticipantApp() {
   const [userId, setUserId] = useState(getStoredUserId)
   const [displayName, setDisplayName] = useState(getStoredDisplayName)
   const [selections, setSelections] = useState(getStoredSelections)
@@ -222,6 +223,12 @@ function App() {
       </section>
     </main>
   )
+}
+
+function App() {
+  return new URLSearchParams(window.location.search).get('mode') === 'volunteer'
+    ? <VolunteerMode />
+    : <ParticipantApp />
 }
 
 export default App

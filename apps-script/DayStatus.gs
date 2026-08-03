@@ -30,6 +30,8 @@ function getDayStatus(payload) {
     return success({ days: days, serverTime: new Date().toISOString() })
   } catch (exception) {
     error('Day-status lookup failed operationally.')
+    error('operation=getDayStatus; environment=' + validation.environment + '; date=all; validationReason=' + (exception && exception.message ? exception.message : 'Unknown failure'))
+    logUnexpectedFailure('getDayStatus', exception)
     return failure('SERVER_ERROR', 'Day status could not be loaded.')
   }
 }
@@ -55,6 +57,7 @@ function loadDayMetrics(sheet, environment) {
 
   var rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, Config.DAY_METRICS_HEADERS.length).getValues()
   var metricsByDate = {}
+  var metricsVersion = null
 
   rows.forEach(function (row) {
     if (row[0] !== environment) {
@@ -67,15 +70,17 @@ function loadDayMetrics(sheet, environment) {
       ifAvailableTotal: row[3],
       volunteerCount: row[4],
       capacity: row[5],
-      chance: row[6] === '' ? null : row[6],
+      chance: normalizeMetricsChance_(row[6]),
       metricsUpdatedAt: normalizeMetricsTimestamp_(row[7]),
+      metricsVersion: normalizeMetricsVersion_(row[8]),
     }
 
-    if (Config.FESTIVAL_DATES_2026.indexOf(date) === -1 || metricsByDate[date] || !isValidDayMetrics_(metrics)) {
+    if (Config.FESTIVAL_DATES_2026.indexOf(date) === -1 || metricsByDate[date] || !isValidDayMetrics_(metrics) || !metrics.metricsVersion || (metricsVersion && metrics.metricsVersion !== metricsVersion)) {
       error('Day metrics are malformed or duplicated.')
       throw new Error('Day metrics are invalid.')
     }
 
+    metricsVersion = metrics.metricsVersion
     metricsByDate[date] = metrics
   })
 
@@ -98,10 +103,14 @@ function isValidDayMetrics_(metrics) {
     return Number.isInteger(value) && value >= 0
   })
   var chanceIsValid = metrics.capacity === 0
-    ? metrics.chance === null || metrics.chance === ''
+    ? metrics.chance === null
     : Config.CHANCE_VALUES.indexOf(metrics.chance) !== -1
 
   return countsAreValid && chanceIsValid && Boolean(metrics.metricsUpdatedAt)
+}
+
+function normalizeMetricsChance_(value) {
+  return value === '' || value === null || value === undefined ? null : value
 }
 
 function normalizeMetricsTimestamp_(value) {
@@ -114,6 +123,23 @@ function normalizeMetricsTimestamp_(value) {
   }
 
   return null
+}
+
+function normalizeMetricsVersion_(value) {
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value) || !Number.isInteger(value)) {
+      return null
+    }
+
+    value = String(value)
+  }
+
+  if (typeof value !== 'string') {
+    return null
+  }
+
+  value = value.trim()
+  return /^\d{14}$/.test(value) ? value : null
 }
 
 function dayStatusError_(code, message) {

@@ -163,3 +163,58 @@ curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
   -d '{"action":"getDayStatus","payload":{"environment":"LIVE"}}' \
   | python3 -m json.tool
 ```
+
+Volunteer overview, successful LIVE request:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" \
+  -H "Content-Type: application/json" \
+  --data-binary @- <<'JSON' \
+| python3 -m json.tool
+{"action":"getVolunteerOverview","payload":{"environment":"LIVE","date":"2026-08-04"}}
+JSON
+```
+
+Volunteer overview, DEMO request:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" \
+  -H "Content-Type: application/json" \
+  --data-binary @- <<'JSON' \
+| python3 -m json.tool
+{"action":"getVolunteerOverview","payload":{"environment":"DEMO","date":"2026-08-04"}}
+JSON
+```
+
+Volunteer overview, invalid date:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" \
+  -H "Content-Type: application/json" \
+  --data-binary @- <<'JSON' \
+| python3 -m json.tool
+{"action":"getVolunteerOverview","payload":{"environment":"LIVE","date":"2026-08-09"}}
+JSON
+```
+
+Volunteer overview, invalid environment:
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" \
+  -H "Content-Type: application/json" \
+  --data-binary @- <<'JSON' \
+| python3 -m json.tool
+{"action":"getVolunteerOverview","payload":{"environment":"TEST","date":"2026-08-04"}}
+JSON
+```
+
+Volunteer overview before the first metrics publication (returns zero programme counts and `null` metrics):
+
+```bash
+curl -sS -L "$SORSZAMVADASZ_API_URL" \
+  -H "Content-Type: application/json" \
+  --data-binary @- <<'JSON' \
+| python3 -m json.tool
+{"action":"getVolunteerOverview","payload":{"environment":"LIVE","date":"2026-08-04"}}
+JSON
+```

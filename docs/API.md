@@ -80,12 +80,13 @@ Backend error messages are intended for diagnostics and need not be displayed di
 
 # API Endpoints
 
-The participant MVP requires four operations:
+The participant and volunteer MVP requires five operations:
 
 1. Register participant
 2. Load participant state
 3. Synchronize selections
 4. Load daily status
+5. Load volunteer overview
 
 Google Apps Script may expose these through one web-app URL using an `action` field rather than literal REST paths.
 
@@ -399,6 +400,60 @@ The frontend displays:
 
 ---
 
+# Load Volunteer Overview
+
+Returns a read-only planning overview for one festival day. It does not create
+volunteer registrations, allocations, or new metrics.
+
+## Logical endpoint
+
+```text
+POST /volunteer-overview
+```
+
+## Request
+
+```json
+{
+  "environment": "LIVE",
+  "date": "2026-08-04"
+}
+```
+
+## Success response
+
+```json
+{
+  "ok": true,
+  "data": {
+    "date": "2026-08-04",
+    "state": "OPEN",
+    "volunteerCount": 5,
+    "capacity": 40,
+    "chance": "GOOD",
+    "metricsUpdatedAt": "2026-08-04T08:00:00+02:00",
+    "metricsVersion": "20260804080000",
+    "programmes": [
+      {
+        "programmeId": "programme-uuid-1",
+        "wantCount": 18,
+        "ifAvailableCount": 9
+      }
+    ],
+    "serverTime": "2026-08-04T08:15:00+02:00"
+  }
+}
+```
+
+Before the first metrics publication, the response contains every active
+programme for the requested day with zero counts. `chance`, `metricsUpdatedAt`,
+and `metricsVersion` are `null`.
+
+Published DayMetrics and ProgrammeMetrics must use the same `metricsVersion`.
+Mixed, partial, or malformed published snapshots fail with `SERVER_ERROR`.
+
+---
+
 # Selection Model
 
 Selections are represented as an object keyed by programme ID.
@@ -516,6 +571,7 @@ register
 getParticipant
 syncSelections
 getDayStatus
+getVolunteerOverview
 ```
 
 This avoids building unnecessary routing infrastructure while preserving clear logical operations.

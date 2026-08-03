@@ -18,6 +18,13 @@ var Config = {
   SELECTIONS_HEADERS: ['id', 'userId', 'environment', 'programmeId', 'priority', 'createdAt', 'updatedAt'],
   DAY_STATES_HEADERS: ['environment', 'date', 'state', 'updatedAt'],
   FESTIVAL_DATES_2026: ['2026-08-04', '2026-08-05', '2026-08-06', '2026-08-07', '2026-08-08'],
+  PROGRAMME_DAY_DATES_2026: {
+    KEDD: '2026-08-04',
+    SZERDA: '2026-08-05',
+    'CSÜTÖRTÖK': '2026-08-06',
+    'PÉNTEK': '2026-08-07',
+    SZOMBAT: '2026-08-08',
+  },
   DAY_STATE_OPEN: 'OPEN',
   DAY_STATE_VALUES: ['OPEN', 'CLOSED', 'QUEUEING', 'FINISHED'],
   DAY_STATE_LOCK_TIMEOUT_MS: 5000,

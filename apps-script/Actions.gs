@@ -11,6 +11,7 @@ function dispatchAction(request) {
     case 'getParticipant':
       return getParticipant(request.payload)
     case 'syncSelections':
+      return syncSelections(request.payload)
     case 'getDayStatus':
       return failure('NOT_IMPLEMENTED', 'The ' + request.action + ' action is not implemented yet.')
     default:

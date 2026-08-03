@@ -646,6 +646,10 @@ Minimum participant API error codes:
 | `DAY_NOT_OPEN`         | Participant writes are locked    |
 | `DAY_FINISHED`         | Volunteer status is locked       |
 | `ACCESS_DENIED`        | Volunteer access code is invalid |
+
+## Admin actions
+
+`getAdminOverview`, `setDayState`, `publishMetricsAdmin`, `previewLiveInitialization`, and `initializeLive` require the exact `ADMIN_ACCESS_CODE` Script Property value as `accessCode`. They return `ACCESS_DENIED` for missing or invalid codes. `initializeLive` additionally requires `confirmation: "LIVE"`; it clears only LIVE user-generated rows, resets the five LIVE day states to OPEN, preserves DEMO, and does not publish metrics automatically.
 | `SERVER_ERROR`         | Unexpected backend error         |
 
 The backend must not return stack traces or internal spreadsheet details to clients.

@@ -20,6 +20,11 @@ function dispatchAction(request) {
       return setVolunteerStatus(request.payload)
     case 'getProgrammeRequestors':
       return getProgrammeRequestors(request.payload)
+    case 'getAdminOverview': return getAdminOverview(request.payload)
+    case 'setDayState': return setDayState(request.payload)
+    case 'publishMetricsAdmin': return publishMetricsAdmin(request.payload)
+    case 'previewLiveInitialization': return previewLiveInitialization(request.payload)
+    case 'initializeLive': return initializeLive(request.payload)
     default:
       return failure('UNKNOWN_ACTION', 'Unsupported action: ' + request.action + '.')
   }

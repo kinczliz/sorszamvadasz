@@ -1,6 +1,6 @@
 export type Environment = 'LIVE' | 'DEMO'
 
-export const currentEnvironment: Environment = 'LIVE'
+export const currentEnvironment: Environment = new URLSearchParams(window.location.search).get('environment') === 'DEMO' ? 'DEMO' : 'LIVE'
 
 export const festivalDayDates: Record<string, string> = {
   KEDD: '2026-08-04',

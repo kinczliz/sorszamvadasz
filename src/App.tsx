@@ -4,6 +4,7 @@ import { ApiError, getDayStatus, getParticipant, register, setVolunteerStatus, s
 import type { DayStatus } from './api'
 import ProgrammeBrowser from './ProgrammeBrowser'
 import VolunteerMode from './VolunteerMode'
+import AdminMode from './AdminMode'
 import { currentEnvironment } from './config'
 import {
   clearUserId,
@@ -261,9 +262,13 @@ function ParticipantApp() {
 }
 
 function App() {
-  return new URLSearchParams(window.location.search).get('mode') === 'volunteer'
-    ? <VolunteerMode />
-    : <ParticipantApp />
+  const query = new URLSearchParams(window.location.search)
+  if (query.get('mode') === 'volunteer') return <VolunteerMode />
+  if (query.get('mode') === 'admin') return <AdminMode />
+  if (query.get('environment') === 'LIVE' || query.get('environment') === 'DEMO') return <ParticipantApp />
+  return <Landing />
 }
+
+function Landing() { return <main className="landing"><h1>SORSZÁMVADÁSZ</h1><p>Próbáld ki a DEMO-t!<br />Bármit megjelölhetsz, nem befolyásolja az éles adatokat.</p><p>A DEMO és az ÉLES rendszer teljesen különálló.<br />A névregisztrációk és a jelölések sem kerülnek át.</p><div className="landing-actions"><a href="?environment=DEMO">DEMO</a><a href="?environment=LIVE">ÉLES</a></div><hr /><a className="landing-admin" href="?mode=admin">Admin</a></main> }
 
 export default App

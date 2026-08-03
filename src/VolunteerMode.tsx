@@ -180,6 +180,7 @@ function VolunteerMode() {
         <p className="festival-name">Ördögkatlan</p>
         <h1 id="volunteer-title">Sorszámvadász</h1>
         <p className="eyebrow">Önkéntes mód</p>
+        <a className="volunteer-return" href={`?environment=${currentEnvironment}`}>Vissza a programokhoz</a>
       </header>
 
       <div className="volunteer-day-picker">

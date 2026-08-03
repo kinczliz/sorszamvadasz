@@ -22,6 +22,12 @@
 4. Redeploy the web app after adding or changing the property.
 5. Share the code only with trusted volunteers. Rotate the Script Property value immediately if it is disclosed.
 
+## Admin Mode
+
+Add an `ADMIN_ACCESS_CODE` Script Property in Apps Script Project Settings, set a trusted shared value, then redeploy. Open the protected UI at `/?mode=admin`; it stores a successful code only for the browser session.
+
+For LIVE initialization, first use the preview, verify all counts, type `LIVE` in the second confirmation, then publish metrics manually. Existing browser-local LIVE state can be uploaded again by participants after initialization.
+
 The Users sheet migration adds a `registrationId` header as the final column without changing existing rows. Existing users may have a blank value.
 
 To update an existing web app after code changes, open **Deploy → Manage deployments**, select the web-app deployment, choose **Edit**, select **New version**, then deploy. Keep using the copied `/exec` URL unless Google changes it.

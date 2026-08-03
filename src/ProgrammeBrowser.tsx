@@ -204,6 +204,7 @@ function ProgrammeBrowser({
       <header className="programme-header">
         <p className="festival-name">Ördögkatlan</p>
         <h1 id="app-title">Sorszámvadász</h1>
+        <a className="volunteer-link" href={`?mode=volunteer&environment=${new URLSearchParams(window.location.search).get('environment') === 'DEMO' ? 'DEMO' : 'LIVE'}`} aria-label="Önkéntes mód megnyitása" title="Önkéntes mód">😇</a>
         <div className="greeting">
           <p className="eyebrow">Szia, {displayName}!</p>
           {hasSelections && (

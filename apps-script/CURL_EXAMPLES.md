@@ -289,6 +289,18 @@ Programme requestors setup:
 export VOLUNTEER_ACCESS_CODE="..."
 ```
 
+Admin setup and requests:
+
+```bash
+export ADMIN_ACCESS_CODE="..."
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary '{"action":"getAdminOverview","payload":{"accessCode":"'"$ADMIN_ACCESS_CODE"'"}}' | python3 -m json.tool
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary '{"action":"setDayState","payload":{"accessCode":"'"$ADMIN_ACCESS_CODE"'","environment":"LIVE","date":"2026-08-04","state":"CLOSED"}}' | python3 -m json.tool
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary '{"action":"publishMetricsAdmin","payload":{"accessCode":"'"$ADMIN_ACCESS_CODE"'"}}' | python3 -m json.tool
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary '{"action":"previewLiveInitialization","payload":{"accessCode":"'"$ADMIN_ACCESS_CODE"'"}}' | python3 -m json.tool
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary '{"action":"initializeLive","payload":{"accessCode":"'"$ADMIN_ACCESS_CODE"'","confirmation":"LIVE"}}' | python3 -m json.tool
+curl -sS -L "$SORSZAMVADASZ_API_URL" -H "Content-Type: application/json" --data-binary '{"action":"getAdminOverview","payload":{"accessCode":"wrong-code"}}' | python3 -m json.tool
+```
+
 Successful programme requestor lookup:
 
 ```bash

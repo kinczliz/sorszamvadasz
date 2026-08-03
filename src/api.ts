@@ -167,3 +167,4 @@ export function getProgrammeRequestors(environment: Environment, programmeId: st
 export function setVolunteerStatus(environment: Environment, userId: string, date: string, active: boolean) {
   return request<VolunteerStatusResponse>('setVolunteerStatus', { environment, userId, date, active })
 }
+export function adminRequest<T>(action: string, payload: Record<string, unknown>) { return request<T>(action, payload) }

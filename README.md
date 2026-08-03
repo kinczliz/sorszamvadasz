@@ -67,3 +67,21 @@ data/2026/
   programs.json Generated programme dataset
 docs/           Product and domain documentation
 ```
+
+## Beta Status
+
+Implemented
+
+- ✅ Registration
+- ✅ Retry-safe registration
+- ✅ Programme selection
+- ✅ Volunteer signup
+- ✅ Volunteer dashboard
+- ✅ Hourly metrics publication
+
+Pending
+
+- User feedback
+- UI polish
+- Admin tools
+

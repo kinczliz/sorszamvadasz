@@ -1,22 +1,38 @@
 # API request examples
 
-Set `API_URL` to the Apps Script web-app URL before running these requests.
-
 ```bash
-curl -X POST "$API_URL" -H 'Content-Type: application/json' -d '{"action":"register","environment":"LIVE"}'
-curl -X POST "$API_URL" -H 'Content-Type: application/json' -d '{"action":"syncSelections","environment":"LIVE"}'
-curl -X POST "$API_URL" -H 'Content-Type: application/json' -d '{"action":"getDayStatus","environment":"LIVE"}'
-curl -X POST "$API_URL" -H 'Content-Type: application/json' -d '{"action":"getParticipant","environment":"LIVE"}'
+export SORSZAMVADASZ_API_URL="https://script.google.com/macros/s/DEPLOYMENT_ID/exec"
 ```
 
-Each request currently returns `NOT_IMPLEMENTED`, for example:
+Successful registration:
 
-```json
-{
-  "ok": false,
-  "error": {
-    "code": "NOT_IMPLEMENTED",
-    "message": "The register action is not implemented yet."
-  }
-}
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"register","payload":{"environment":"LIVE","displayName":"Zoli Cisco","selections":{}}}' \
+  | python3 -m json.tool
+```
+
+Duplicate display name (run after the successful registration):
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"register","payload":{"environment":"LIVE","displayName":"zoli cisco","selections":{}}}' \
+  | python3 -m json.tool
+```
+
+Invalid environment:
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"register","payload":{"environment":"TEST","displayName":"Zoli Cisco","selections":{}}}' \
+  | python3 -m json.tool
+```
+
+Invalid display name:
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"register","payload":{"environment":"LIVE","displayName":"   ","selections":{}}}' \
+  | python3 -m json.tool
+```
 ```

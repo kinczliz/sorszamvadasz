@@ -7,6 +7,7 @@ function dispatchAction(request) {
 
   switch (request.action) {
     case 'register':
+      return registerParticipant(request.payload)
     case 'syncSelections':
     case 'getDayStatus':
     case 'getParticipant':

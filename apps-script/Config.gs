@@ -8,4 +8,12 @@ var Config = {
   SHEET_DAY_METRICS: 'DayMetrics',
   ENV_LIVE: 'LIVE',
   ENV_DEMO: 'DEMO',
+  MAX_DISPLAY_NAME_LENGTH: 40,
+  MAX_WANT_PER_DAY: 2,
+  MAX_IF_AVAILABLE_PER_DAY: 4,
+  PROGRAMME_DATA_URL: '',
+  PROGRAMME_CACHE_TTL_SECONDS: 300,
+  REGISTRATION_LOCK_TIMEOUT_MS: 5000,
+  USERS_HEADERS: ['id', 'environment', 'displayName', 'displayNameKey', 'createdAt', 'lastSeen'],
+  SELECTIONS_HEADERS: ['id', 'userId', 'environment', 'programmeId', 'priority', 'createdAt', 'updatedAt'],
 }

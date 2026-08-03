@@ -69,6 +69,24 @@ function ensureDayStatesSheet() {
   }
 }
 
+function ensureDayMetricsSheet() {
+  var sheet = getDayMetricsSheet()
+
+  if (sheet) {
+    return sheet
+  }
+
+  var lock = LockService.getScriptLock()
+  lock.waitLock(Config.DAY_METRICS_LOCK_TIMEOUT_MS)
+
+  try {
+    sheet = getDayMetricsSheet()
+    return sheet || getOrCreateSheet_(Config.SHEET_DAY_METRICS, Config.DAY_METRICS_HEADERS)
+  } finally {
+    lock.releaseLock()
+  }
+}
+
 function getSheet_(name) {
   return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name)
 }

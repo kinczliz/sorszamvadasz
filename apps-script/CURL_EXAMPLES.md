@@ -131,3 +131,35 @@ curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
   -d '{"action":"syncSelections","payload":{"environment":"LIVE","userId":"USER_UUID","selections":{"7a4e2012-f5c7-5a39-b8bb-d8d8b1a87505":"WANT"}}}' \
   | python3 -m json.tool
 ```
+
+Successful LIVE day-status request:
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"getDayStatus","payload":{"environment":"LIVE"}}' \
+  | python3 -m json.tool
+```
+
+Successful DEMO day-status request:
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"getDayStatus","payload":{"environment":"DEMO"}}' \
+  | python3 -m json.tool
+```
+
+Invalid environment:
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"getDayStatus","payload":{"environment":"TEST"}}' \
+  | python3 -m json.tool
+```
+
+Before any metrics exist (returns zero counts and `null` metrics):
+
+```bash
+curl -X POST "$SORSZAMVADASZ_API_URL" -H 'Content-Type: application/json' \
+  -d '{"action":"getDayStatus","payload":{"environment":"LIVE"}}' \
+  | python3 -m json.tool
+```

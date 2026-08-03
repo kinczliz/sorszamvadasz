@@ -28,4 +28,7 @@ var Config = {
   DAY_STATE_OPEN: 'OPEN',
   DAY_STATE_VALUES: ['OPEN', 'CLOSED', 'QUEUEING', 'FINISHED'],
   DAY_STATE_LOCK_TIMEOUT_MS: 5000,
+  DAY_METRICS_HEADERS: ['environment', 'date', 'wantCount', 'ifAvailableCount', 'volunteerCount', 'capacity', 'chance', 'metricsUpdatedAt'],
+  CHANCE_VALUES: ['VERY_GOOD', 'GOOD', 'LOW', 'VERY_LOW', 'HOPELESS'],
+  DAY_METRICS_LOCK_TIMEOUT_MS: 5000,
 }

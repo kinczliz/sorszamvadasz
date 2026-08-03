@@ -13,7 +13,7 @@ function dispatchAction(request) {
     case 'syncSelections':
       return syncSelections(request.payload)
     case 'getDayStatus':
-      return failure('NOT_IMPLEMENTED', 'The ' + request.action + ' action is not implemented yet.')
+      return getDayStatus(request.payload)
     default:
       return failure('UNKNOWN_ACTION', 'Unsupported action: ' + request.action + '.')
   }

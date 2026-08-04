@@ -34,6 +34,32 @@ body {
 .landing-actions a { display: grid; place-items: center; min-height: 3rem; color: #171717; background: #f5f5f2; border-radius: .375rem; font-weight: 700; text-decoration: none; }
 .landing-admin { color: #c9c9c3; text-align: center; }
 
+.admin-mode { align-content: start; }
+.admin-mode h2 { margin: .5rem 0 0; }
+.admin-section-list { display: grid; gap: .75rem; }
+.admin-section-list button { margin: 0; text-align: left; }
+.admin-panel-header { display: flex; align-items: center; gap: 1rem; }
+.admin-panel-header h2 { margin: 0; }
+.admin-back { width: auto; min-height: 2.75rem; margin: 0; padding: .5rem .75rem; }
+.admin-days { display: grid; gap: .75rem; }
+.admin-day-row { display: grid; grid-template-columns: 1fr 1.5fr auto; gap: .75rem; align-items: end; padding: 1rem; background: #242424; border: 1px solid #373737; border-radius: .375rem; }
+.admin-day-row > div, .admin-metrics > div { display: grid; gap: .35rem; }
+.admin-day-row label { margin-top: .35rem; font-size: .875rem; }
+.admin-day-row select { min-height: 2.75rem; padding: .5rem; color: inherit; background: #171717; border: 1px solid #73736c; border-radius: .375rem; font: inherit; }
+.admin-day-row button { width: auto; min-height: 2.75rem; margin: 0; }
+.admin-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.admin-metrics > div, .admin-counts, .admin-confirm, .admin-result { padding: 1rem; background: #242424; border: 1px solid #373737; border-radius: .375rem; }
+.admin-counts p, .admin-result p { margin: .35rem 0; }
+.admin-counts p { display: flex; justify-content: space-between; }
+.admin-confirm button { margin-top: .75rem; }
+.admin-cancel { color: #f5f5f2; background: transparent; border: 1px solid #73736c; }
+
+@media (max-width: 38rem) {
+  .admin-day-row { grid-template-columns: 1fr; }
+  .admin-day-row button { width: 100%; }
+  .admin-metrics { grid-template-columns: 1fr; }
+}
+
 .programme-browser {
   min-height: 100vh;
   padding: 2rem 1.5rem 3rem;
